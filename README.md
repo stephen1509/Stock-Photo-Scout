@@ -13,3 +13,5 @@ Initial project checkpoint. Dropbox is the primary working storage and project a
 
 ## Planned first milestone
 Establish project authority documents, a safe local folder scanner, a metadata catalogue, and focused tests before adding image analysis or agency integrations.
+
+Checkpoint 0.01 establishes the first two of those pieces: project authority and a safe inventory. Start with [PROJECT_AUTHORITY_CURRENT.md](PROJECT_AUTHORITY_CURRENT.md), then [CURRENT_STATUS.md](CURRENT_STATUS.md).
