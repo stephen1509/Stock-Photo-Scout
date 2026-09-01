@@ -10,6 +10,7 @@ local_catalogs/
 local_drafts/
 local_previews/
 local_workspace/
+local_preparation/
 dashboard.log
 dashboard.err.log
 *.sqlite
