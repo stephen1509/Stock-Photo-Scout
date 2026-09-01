@@ -75,6 +75,38 @@ def analysis_observations(analysis: CandidateAnalysis) -> tuple[str, ...]:
     return tuple(observations)
 
 
+def analysis_from_json(serialized: str) -> CandidateAnalysis:
+    """Load a validated analysis record without opening its source image."""
+
+    from .visual_signals import VisualPrompt, VisualSignalReport
+
+    payload = json.loads(serialized)
+    if payload.get("schema_version") != ANALYSIS_SCHEMA_VERSION or not isinstance(payload.get("analysis"), dict):
+        raise ValueError("Analysis JSON does not match the supported schema.")
+    item = payload["analysis"]
+    relative_path = item.get("relative_path", "")
+    _validated_relative_path(relative_path)
+    report = item.get("report")
+    if not isinstance(report, dict) or not isinstance(report.get("prompts", []), list):
+        raise ValueError("Analysis JSON does not contain a valid report.")
+    prompts = tuple(
+        VisualPrompt(code=str(prompt.get("code", "")), explanation=str(prompt.get("explanation", "")))
+        for prompt in report.get("prompts", [])
+        if isinstance(prompt, dict)
+    )
+    visual = VisualSignalReport(
+        width=int(report["width"]),
+        height=int(report["height"]),
+        mean_luminance=float(report["mean_luminance"]),
+        dark_clip_ratio=float(report["dark_clip_ratio"]),
+        bright_clip_ratio=float(report["bright_clip_ratio"]),
+        sharpness_proxy=float(report["sharpness_proxy"]),
+        noise_proxy=float(report["noise_proxy"]),
+        prompts=prompts,
+    )
+    return CandidateAnalysis(relative_path, str(item.get("decoder_name", "")), visual)
+
+
 def analysis_to_json(analysis: CandidateAnalysis) -> str:
     return json.dumps(
         {"schema_version": ANALYSIS_SCHEMA_VERSION, "analysis": asdict(analysis)},
