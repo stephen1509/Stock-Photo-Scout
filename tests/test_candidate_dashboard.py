@@ -33,6 +33,48 @@ class CandidateDashboardTests(unittest.TestCase):
             self.assertEqual(d.list_candidates()[0]["state"],"shortlist")
             with self.assertRaises((FileNotFoundError,ValueError)): d.preview_path("../secret.jpg")
 
+    def test_preparation_and_preflight_are_local_only(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td); source=root/"photos"; source.mkdir(); drafts=root/"local_drafts"; drafts.mkdir()
+            d=CandidateDashboard(CandidateDashboardSettings.create(
+                source,drafts,drafts/"accepted_spellings.json",
+                root/"local_previews",root/"local_workspace"/"candidates.json",
+                root/"local_preparation"
+            ))
+            d.set_state({"relative_path":"photo.jpg","state":"submission-ready"})
+            loaded=d.load_preparation({"relative_path":"photo.jpg"})
+            self.assertEqual(loaded["preparation"]["route"],"undecided")
+            saved=d.save_preparation({
+                "relative_path":"photo.jpg",
+                "title":"Temple",
+                "description":"Temple exterior",
+                "keywords":["temple","Japan"],
+                "categories":["architecture"],
+                "route":"editorial",
+                "editor_target":"darktable",
+                "working_export_relative_path":"exports/photo-final.jpg",
+                "notes":"Reviewed locally",
+            })
+            self.assertEqual(saved["prompts"],[])
+            packet=d.build_preflight({
+                "relative_path":"photo.jpg",
+                "preview_integrity":"match",
+                "current_requirements_reviewed":True,
+            })
+            self.assertTrue(packet["local_packet_complete"])
+            self.assertIn("does not upload, submit",packet["text"])
+            self.assertTrue((root/"local_preparation").exists())
+            self.assertFalse((root/"local_preparation").is_relative_to(source))
+
+    def test_preparation_directory_cannot_be_inside_source(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td); source=root/"photos"; source.mkdir()
+            with self.assertRaises(ValueError):
+                CandidateDashboardSettings.create(
+                    source,root/"drafts",root/"drafts"/"accepted_spellings.json",
+                    root/"previews",root/"workspace.json",source/"preparation"
+                )
+
     def test_workspace_paths_cannot_be_inside_source(self):
         with tempfile.TemporaryDirectory() as td:
             root=Path(td); source=root/"photos"; source.mkdir()
