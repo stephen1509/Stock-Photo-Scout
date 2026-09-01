@@ -8,6 +8,8 @@ working_copies/
 exports/
 local_catalogs/
 local_drafts/
+local_previews/
+local_workspace/
 dashboard.log
 dashboard.err.log
 *.sqlite

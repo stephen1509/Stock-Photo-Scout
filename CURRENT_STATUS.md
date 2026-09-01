@@ -1,60 +1,53 @@
 # Current Status
 
-## Checkpoint 0.01 — Local foundation (complete)
+## Checkpoints 0.01–0.03 — complete
 
-- Project authority and safe operating rules recorded.
-- Product, architecture, Dreamstime-rule, and test-plan documents established.
-- Read-only image-file inventory implemented using only the Python standard library.
-- Focused unit coverage verifies supported file recognition, nested discovery, non-image exclusion, and no source-file changes.
+The local scanner, deterministic catalog/metadata foundation, metadata-only review prompts, and opt-in SHA-256 exact-duplicate grouping are complete and locally verified. Originals remain read-only.
 
-## Checkpoint 0.02 — Local catalog and metadata (complete)
+## Checkpoint 0.04 — Stock readiness (complete foundation)
 
-Completed:
+Implemented and verified:
 
-- Deterministic, in-memory catalog records with relative paths and a versioned schema.
-- Read-only, bounded PNG and JPEG header parsing for pixel dimensions.
-- Read-only TIFF dimension parsing and bounded JPEG/TIFF EXIF extraction.
-- Catalog schema version 2 records orientation, original capture-time text, camera make/model, and lens model.
-- Privacy-sensitive GPS, owner/serial identifiers, comments, thumbnails, and arbitrary EXIF fields are not collected.
-- Explicit `unsupported`, `invalid`, and `error` outcomes instead of guessed metadata.
-- Stable JSON serialization that does not embed the selected source-root path or write files implicitly.
-- Explicit JSON persistence that refuses destinations inside the source tree and refuses overwrites.
-- Project-local `local_catalogs/` output is excluded from Git.
-- Focused tests proving dimension extraction, deterministic catalog ordering, and no source-file changes.
-- An approved representative photo folder completed a read-only local trial; the saved catalog matched a fresh inventory and did not embed the source-root path.
+- editable local title, keyword, note, and rights-observation drafts;
+- explainable readiness prompts;
+- offline spelling review and explicit accepted-spelling dictionary;
+- CLI create/edit/review flows;
+- localhost-only draft dashboard;
+- non-overwriting local persistence outside source folders.
 
-Focused local verification has passed. A GitHub checkpoint remains a deliberate follow-up, not an automatic sync.
+One user-selected candidate has a local draft and recorded observations. Remaining prompts require human review; no legal or marketplace conclusion is made.
 
-## Checkpoint 0.03 — Review signals (complete)
+## Research and operating plan — complete (2026-09-01)
 
-Completed:
+The requested current Dreamstime/tool-ecosystem research was completed and recorded in `RESEARCH_BRIEF_2026-09-01.md`.
 
-- Metadata-only technical review prompts with no default size threshold.
-- Explicit caller-configured pixel-count prompts that never claim marketplace compliance.
-- SHA-256 exact-content grouping, deliberately separate from metadata-only review because it reads source bytes.
-- Hashing issues are reported per relative path; no source file is changed.
-- An approved representative photo folder completed a read-only duplicate trial: one exact-content group was found, with no hashing issues.
-- A metadata-only review completed without a default size threshold; orientation-display prompts were reported separately from quality judgments.
-- A fresh inventory matched the saved catalog after the review and duplicate pass.
+The resulting end-to-end implementation plan is recorded in `APP_OPERATING_PLAN.md`. Research is no longer the next action.
 
-Focused local verification has passed. A GitHub checkpoint remains a deliberate follow-up, not an automatic sync.
+## Checkpoint 0.05A — Local candidate workspace (in progress)
 
-## Checkpoint 0.04 — Stock readiness (in progress)
+First tested implementation slice completed:
 
-Implemented with synthetic fixtures only:
+- new local candidate-workspace model;
+- human-controlled states: `skip`, `maybe`, `shortlist`, `edit`, `metadata-ready`, `submission-ready`;
+- deterministic workspace JSON outside the source tree;
+- explicit consent required before preview byte reads;
+- supported JPEG/PNG/TIFF preview copies created outside the source tree;
+- preview copies are exclusive/non-overwriting;
+- traversal, source-tree destination, symlink, unsupported-type, and invalid-state safeguards;
+- focused unit tests verify source-byte preservation and safe persistence.
 
-- Editable local title, keyword, note, and user-supplied rights-observation drafts.
-- Explainable prompts for missing drafts, duplicate keywords, unknown observations, and recorded follow-up context.
-- Offline spelling prompts review every word in titles, keywords, and notes. They ask about unrecognized terms and suggest close local-vocabulary matches, but never silently replace text.
-- Explicit local dictionaries can retain user-confirmed spellings (such as proper names) without adding them automatically or storing photo data.
-- A project-local command-line review flow can display draft prompts and explicitly save a user-confirmed spelling for later reviews; it requires no Python package installation and does not open the source image.
-- Project-local commands can create and explicitly update title, keyword, note, and structured rights-observation drafts outside the selected source folder.
-- A localhost-only browser dashboard can show and update local drafts, prompts, and confirmed spellings without opening source images.
-- No legal, release, or marketplace-acceptance determination.
-- Explicit non-overwriting JSON persistence outside source folders; `local_drafts/` is excluded from Git.
+Focused 0.05A tests: 4 passed.
 
-One user-selected candidate now has a local draft and recorded rights observations. Its remaining prompts require manual review; no rights or marketplace conclusion has been made.
+Still to do inside 0.05A:
 
-Not yet started: commercial-readiness checks; quality scoring beyond technical prompts; title/keyword/release workflows; Dreamstime connection or submission; paid services, cloud processing, CI, and deployment.
+- connect the workspace model to the project CLI/dashboard;
+- add a local visual gallery/browser flow;
+- decide whether to continue with full-size preview copies only or introduce a reviewed local thumbnail-decoding dependency;
+- run an explicitly approved small real-photo-folder trial and verify originals remain unchanged.
 
-The next user-directed ChatGPT session is a thorough research-and-planning phase for Dreamstime and the wider photography-tool ecosystem. Its required scope, safety gates, and deliverables are saved in `NEXT_CHATGPT_ACTION.md`; it does not itself authorize installations, cloud/AI processing, uploads, account access, or submissions.
+## Later phases
+
+- 0.05B — local technical/visual suggestions;
+- 0.05C — metadata and editor handoff;
+- 0.05D — Dreamstime preflight/manual submission packet;
+- 0.05E — optional AI/cloud/service integrations only after separate approval.
