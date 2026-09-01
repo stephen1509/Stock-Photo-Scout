@@ -10,6 +10,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 from stock_photo_scout.workspace import (
     CandidateWorkspaceRecord,
     create_preview_copy,
+    verify_preview_copy,
     load_workspace,
     save_workspace,
     set_candidate_state,
@@ -72,6 +73,28 @@ class CandidateWorkspaceTests(unittest.TestCase):
             updated = set_candidate_state(loaded, "b.jpg", "edit")
             save_workspace(updated, manifest, source, overwrite=True)
             self.assertEqual(load_workspace(manifest)["b.jpg"].state, "edit")
+
+    def test_preview_integrity_verification_requires_consent_and_detects_stale_copy(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "photos"
+            previews = root / "previews"
+            source.mkdir()
+            image = source / "photo.jpg"
+            image.write_bytes(b"original bytes")
+            create_preview_copy(source, "photo.jpg", previews, consent=True)
+
+            with self.assertRaises(PermissionError):
+                verify_preview_copy(source, "photo.jpg", previews, consent=False)
+
+            report = verify_preview_copy(source, "photo.jpg", previews, consent=True)
+            self.assertTrue(report.matches_source)
+            self.assertEqual(report.source_sha256, report.preview_sha256)
+
+            image.write_bytes(b"changed source bytes")
+            stale = verify_preview_copy(source, "photo.jpg", previews, consent=True)
+            self.assertFalse(stale.matches_source)
+            self.assertNotEqual(stale.source_sha256, stale.preview_sha256)
 
     def test_invalid_state_is_rejected(self) -> None:
         with self.assertRaises(ValueError):
