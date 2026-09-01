@@ -6,7 +6,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json, mimetypes
 from pathlib import Path
 from urllib.parse import quote, unquote, urlparse
-from .dashboard import DashboardSettings, LocalDashboard
+from .dashboard import DashboardSettings, LocalDashboard, _PAGE as DRAFT_PAGE
 from .workspace import CANDIDATE_STATES, create_preview_copy, load_workspace, save_workspace, set_candidate_state
 
 @dataclass(frozen=True)
@@ -105,7 +105,11 @@ def _handler_for(dash):
             path=urlparse(self.path).path
             try:
                 if path=="/": self._send(HTTPStatus.OK,PAGE.encode(),"text/html; charset=utf-8")
+                elif path=="/drafts": self._send(HTTPStatus.OK,DRAFT_PAGE.encode(),"text/html; charset=utf-8")
                 elif path=="/api/candidates": self._json(HTTPStatus.OK,{"candidates":dash.list_candidates()})
+                elif path=="/api/drafts": self._json(HTTPStatus.OK,{"drafts":dash.drafts.list_drafts()})
+                elif path.startswith("/api/drafts/"):
+                    self._json(HTTPStatus.OK,dash.drafts.load_draft(unquote(path.removeprefix("/api/drafts/"))))
                 elif path.startswith("/preview/"):
                     p=dash.preview_path(unquote(path.removeprefix("/preview/")))
                     self._send(HTTPStatus.OK,p.read_bytes(),mimetypes.guess_type(p.name)[0] or "application/octet-stream")
@@ -120,6 +124,9 @@ def _handler_for(dash):
                 path=urlparse(self.path).path
                 if path=="/api/candidates/state": self._json(HTTPStatus.OK,dash.set_state(payload))
                 elif path=="/api/candidates/preview": self._json(HTTPStatus.OK,dash.create_preview(payload))
+                elif path=="/api/accepted-spellings": self._json(HTTPStatus.OK,dash.drafts.accept_spelling(payload))
+                elif path.startswith("/api/drafts/"):
+                    self._json(HTTPStatus.OK,dash.drafts.update_draft(unquote(path.removeprefix("/api/drafts/")),payload))
                 else: self._json(HTTPStatus.NOT_FOUND,{"error":"Not found."})
             except (FileNotFoundError,PermissionError,ValueError,json.JSONDecodeError) as e:
                 self._json(HTTPStatus.BAD_REQUEST,{"error":str(e)})
@@ -133,8 +140,9 @@ def _handler_for(dash):
 
 PAGE="""<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
 <title>Stock Photo Scout 0.05A</title>
-<style>body{font:16px system-ui;margin:20px;background:#f5f6f8}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}.card{background:white;padding:12px;border-radius:9px}.card img{width:100%;height:180px;object-fit:contain;background:#eee}select,button{width:100%;padding:9px;margin-top:8px}</style>
-<h1>Stock Photo Scout</h1><p>Only local preview copies are displayed. Originals are never served to the browser.</p><div id=g class=grid></div>
+<style>body{font:16px system-ui;margin:20px;background:#f5f6f8}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}.card{background:white;padding:12px;border-radius:9px}.card img{width:100%;height:180px;object-fit:contain;background:#eee}select,button,a{padding:9px;margin-top:8px}.draftlink{display:inline-block;background:#0756a8;color:white;text-decoration:none;border-radius:6px;margin-bottom:14px}</style>
+<h1>Stock Photo Scout</h1><p>Only local preview copies are displayed. Originals are never served to the browser.</p>
+<a class=draftlink href='/drafts'>Open title / keyword / rights editor</a><div id=g class=grid></div>
 <script>
 const S=['skip','maybe','shortlist','edit','metadata-ready','submission-ready'];
 async function q(u,o){let r=await fetch(u,o),x=await r.json();if(!r.ok)throw Error(x.error);return x}
