@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -68,6 +69,59 @@ def create_preview_copy(
         os.fsync(output.fileno())
     return destination
 
+
+
+@dataclass(frozen=True)
+class PreviewVerification:
+    """Explicit integrity result for one consented source/preview pair."""
+
+    relative_path: str
+    matches_source: bool
+    source_sha256: str
+    preview_sha256: str
+
+
+def verify_preview_copy(
+    source_root: str | Path,
+    relative_path: str,
+    preview_root: str | Path,
+    *,
+    consent: bool,
+) -> PreviewVerification:
+    """Hash a selected source and its derived preview after explicit consent.
+
+    The operation is read-only. It exists to prove whether the preview still
+    matches the current source bytes; it never refreshes or overwrites either file.
+    """
+
+    if consent is not True:
+        raise PermissionError("Explicit preview verification consent is required before reading source image bytes.")
+
+    source_root_path = Path(source_root).expanduser().resolve(strict=True)
+    preview_root_path = Path(preview_root).expanduser().resolve(strict=True)
+    if preview_root_path.is_relative_to(source_root_path):
+        raise ValueError("Preview workspace must be outside the selected source-photo folder.")
+
+    relative = _validated_relative_path(relative_path)
+    source_path = (source_root_path / relative).resolve(strict=True)
+    preview_path = (preview_root_path / relative).resolve(strict=True)
+    if not source_path.is_relative_to(source_root_path) or not preview_path.is_relative_to(preview_root_path):
+        raise ValueError("Verification path escapes its configured root.")
+    for path, label in ((source_path, "source"), (preview_path, "preview")):
+        if path.is_symlink() or not path.is_file():
+            raise ValueError(f"{label.capitalize()} must be a regular non-symlink file.")
+
+    source_hash = _sha256_file(source_path)
+    preview_hash = _sha256_file(preview_path)
+    return PreviewVerification(relative.as_posix(), source_hash == preview_hash, source_hash, preview_hash)
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 def load_workspace(path: str | Path) -> dict[str, CandidateWorkspaceRecord]:
     """Load and validate a local candidate workspace manifest."""
