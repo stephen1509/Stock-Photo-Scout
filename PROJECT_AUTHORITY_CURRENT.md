@@ -29,7 +29,7 @@ Offline-safe development has advanced through the local foundations of phases 0.
 Candidate states, consented external previews, gallery/dashboard, preview integrity verification, and path/source-write safeguards.
 
 ### 0.05B core
-Decoder-independent luminance, clipping, sharpness-proxy, and noise-proxy measurements using caller-configured thresholds only.
+Decoder-independent luminance, clipping, sharpness-proxy, and noise-proxy measurements using caller-configured thresholds only. The consent-gated decoder orchestration, external analysis-record persistence, same-candidate analysis→preflight handoff, and an optional bounded Pillow-compatible adapter are also implemented. Pillow is not installed or authorized as a required dependency yet.
 
 ### 0.05C foundation
 Human metadata, commercial/editorial route, editor target, working-export tracking, local persistence, CLI and dashboard preparation workflow.
@@ -39,7 +39,7 @@ Manual preflight packet combining local preparation completeness, candidate stat
 
 ## Verification
 
-Final offline state: **63/63 tests passed** on Python 3.12. Temporary verification workflows were removed after completion.
+Final offline state: **77/77 tests passed** on Python 3.12. Temporary verification workflows were removed after completion.
 
 ## Current stop condition
 
