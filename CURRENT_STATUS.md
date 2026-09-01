@@ -25,7 +25,7 @@ The resulting end-to-end implementation plan is recorded in `APP_OPERATING_PLAN.
 
 ## Checkpoint 0.05A — Local candidate workspace (in progress)
 
-Implemented and focused-tested:
+Implemented:
 
 - local candidate-workspace model;
 - human-controlled states: `skip`, `maybe`, `shortlist`, `edit`, `metadata-ready`, `submission-ready`;
@@ -34,15 +34,25 @@ Implemented and focused-tested:
 - supported JPEG/PNG/TIFF preview copies outside the source tree;
 - preview copies are exclusive/non-overwriting;
 - traversal, source-tree destination, symlink, unsupported-type, and invalid-state safeguards;
-- standalone no-install workspace CLI for preview creation, candidate-state updates, and manifest display.
+- standalone no-install workspace CLI;
+- candidate gallery layered over the existing localhost draft dashboard;
+- the normal `dashboard` command now launches the candidate gallery;
+- browser state controls persist to the local workspace manifest;
+- the browser can serve only derived preview copies, never originals;
+- preview creation requires an explicit browser confirmation and consent flag.
 
-Focused 0.05A tests: **6 passed**.
+Verification:
+
+- the original 0.05A workspace/CLI focused suite had **6 passing tests**;
+- the candidate-dashboard integration has **4 additional focused passing tests** in an isolated compatibility harness;
+- those integration tests cover source-byte preservation, consent enforcement, persisted state, external workspace paths, and traversal rejection.
+- a complete repository-wide regression run is still required on the working PC before 0.05A is closed.
 
 Still to do inside 0.05A:
 
-- integrate the workspace into the main localhost dashboard/gallery;
-- decide whether full-size preview copies are sufficient or whether to introduce a reviewed local thumbnail-decoding dependency;
-- run an explicitly approved small real-photo-folder trial and verify originals remain unchanged.
+- run the full repository test suite on the working copy;
+- run an explicitly approved small real-photo-folder trial and verify originals remain unchanged;
+- decide whether full-size preview copies are sufficient or whether to introduce a reviewed local thumbnail-decoding dependency.
 
 ## Later phases
 
