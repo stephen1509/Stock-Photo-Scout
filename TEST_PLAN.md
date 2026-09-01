@@ -18,4 +18,6 @@ Spelling tests verify that every word in title, keyword, and note text is review
 
 Local-dictionary tests verify that only explicitly confirmed terms suppress later prompts, and that local JSON persistence is deterministic and does not overwrite without an explicit update.
 
+Command-line tests verify that drafts can be created and explicitly updated outside their source folder while source-image bytes remain unchanged.
+
 Tests must use non-sensitive fixtures. Real-photo samples remain outside Git.

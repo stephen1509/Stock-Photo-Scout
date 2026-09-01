@@ -11,6 +11,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from stock_photo_scout.cli import main
 from stock_photo_scout.drafts import CandidateDraft, draft_to_json
+from stock_photo_scout.drafts import draft_from_json
 
 
 class CommandLineReviewTests(unittest.TestCase):
@@ -40,6 +41,55 @@ class CommandLineReviewTests(unittest.TestCase):
 
             self.assertIn("Todaiji", dictionary_path.read_text(encoding="utf-8"))
             self.assertIn("Nara", dictionary_path.read_text(encoding="utf-8"))
+
+    def test_creates_and_updates_a_draft_without_writing_inside_source(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "photos"
+            source.mkdir()
+            image = source / "photo.jpg"
+            image.write_bytes(b"source image")
+            draft_path = root / "local_drafts" / "photo.json"
+
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(
+                    main(
+                        [
+                            "create-draft",
+                            str(source),
+                            "photo.jpg",
+                            str(draft_path),
+                            "--title",
+                            "Temple at dawn",
+                            "--keyword",
+                            "temple",
+                            "--keyword",
+                            "dawn",
+                        ]
+                    ),
+                    0,
+                )
+                self.assertEqual(
+                    main(
+                        [
+                            "edit-draft",
+                            str(source),
+                            str(draft_path),
+                            "--notes",
+                            "Check logos",
+                            "--logos",
+                            "unknown",
+                        ]
+                    ),
+                    0,
+                )
+
+            saved = draft_from_json(draft_path.read_text(encoding="utf-8"))
+            self.assertEqual(saved.title, "Temple at dawn")
+            self.assertEqual(saved.keywords, ("temple", "dawn"))
+            self.assertEqual(saved.notes, "Check logos")
+            self.assertEqual(saved.rights.visible_logos_or_trademarks, "unknown")
+            self.assertEqual(image.read_bytes(), b"source image")
 
 
 if __name__ == "__main__":

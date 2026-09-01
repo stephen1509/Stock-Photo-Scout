@@ -48,6 +48,7 @@ Implemented with synthetic fixtures only:
 - Offline spelling prompts review every word in titles, keywords, and notes. They ask about unrecognized terms and suggest close local-vocabulary matches, but never silently replace text.
 - Explicit local dictionaries can retain user-confirmed spellings (such as proper names) without adding them automatically or storing photo data.
 - A project-local command-line review flow can display draft prompts and explicitly save a user-confirmed spelling for later reviews; it requires no Python package installation and does not open the source image.
+- Project-local commands can create and explicitly update title, keyword, note, and structured rights-observation drafts outside the selected source folder.
 - No legal, release, or marketplace-acceptance determination.
 - Explicit non-overwriting JSON persistence outside source folders; `local_drafts/` is excluded from Git.
 

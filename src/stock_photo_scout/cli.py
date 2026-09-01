@@ -6,7 +6,15 @@ import argparse
 from pathlib import Path
 from typing import Sequence
 
-from .drafts import draft_from_json, evaluate_readiness
+from .drafts import (
+    CandidateDraft,
+    RightsObservations,
+    draft_from_json,
+    edit_draft,
+    evaluate_readiness,
+    save_draft_json,
+    update_draft_json,
+)
 from .spelling_dictionary import (
     AcceptedSpellings,
     save_spelling_dictionary,
@@ -35,6 +43,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     accept.add_argument("dictionary", type=Path, help="Path to the local accepted-spellings JSON file.")
     accept.add_argument("term", help="The spelling you have confirmed.")
+
+    create = commands.add_parser("create-draft", help="Create a new local draft outside its source-photo folder.")
+    create.add_argument("source_root", type=Path, help="Selected photo-source folder; it is never modified.")
+    create.add_argument("relative_path", help="Photo path relative to the selected source folder.")
+    create.add_argument("draft", type=Path, help="New local draft JSON destination.")
+    _add_draft_fields(create)
+
+    edit = commands.add_parser("edit-draft", help="Explicitly update an existing local draft outside its source folder.")
+    edit.add_argument("source_root", type=Path, help="Selected photo-source folder; it is never modified.")
+    edit.add_argument("draft", type=Path, help="Existing local draft JSON path.")
+    _add_draft_fields(edit)
     return parser
 
 
@@ -46,6 +65,10 @@ def main(arguments: Sequence[str] | None = None) -> int:
         return _review_draft(parsed.draft, parsed.dictionary)
     if parsed.command == "accept-spelling":
         return _accept_spelling(parsed.dictionary, parsed.term)
+    if parsed.command == "create-draft":
+        return _create_draft(parsed)
+    if parsed.command == "edit-draft":
+        return _edit_draft(parsed)
     raise AssertionError(f"Unsupported command: {parsed.command}")
 
 
@@ -72,6 +95,49 @@ def _accept_spelling(dictionary_path: Path, term: str) -> int:
         save_spelling_dictionary(updated, dictionary_path)
     print(f"Confirmed spelling saved locally: {term}")
     return 0
+
+
+def _create_draft(parsed: argparse.Namespace) -> int:
+    draft = _apply_draft_fields(CandidateDraft(parsed.relative_path), parsed)
+    saved_path = save_draft_json(draft, parsed.draft, parsed.source_root)
+    print(f"Local draft created: {saved_path}")
+    return 0
+
+
+def _edit_draft(parsed: argparse.Namespace) -> int:
+    existing = draft_from_json(parsed.draft.read_text(encoding="utf-8"))
+    updated = _apply_draft_fields(existing, parsed)
+    saved_path = update_draft_json(updated, parsed.draft, parsed.source_root)
+    print(f"Local draft updated: {saved_path}")
+    return 0
+
+
+def _add_draft_fields(command: argparse.ArgumentParser) -> None:
+    command.add_argument("--title", help="Replace the draft title; use an empty string to clear it.")
+    command.add_argument("--keyword", action="append", help="Replace keywords with one or more repeatable keyword values.")
+    command.add_argument("--notes", help="Replace the draft notes; use an empty string to clear them.")
+    command.add_argument("--recognizable-people", choices=("unknown", "yes", "no", "not_applicable"))
+    command.add_argument("--private-property", choices=("unknown", "yes", "no", "not_applicable"))
+    command.add_argument("--logos", choices=("unknown", "yes", "no", "not_applicable"))
+    command.add_argument("--third-party-content", choices=("unknown", "yes", "no", "not_applicable"))
+    command.add_argument("--release-evidence", choices=("not_reviewed", "available", "not_available", "not_applicable"))
+
+
+def _apply_draft_fields(draft: CandidateDraft, parsed: argparse.Namespace) -> CandidateDraft:
+    rights = RightsObservations(
+        recognizable_people=parsed.recognizable_people or draft.rights.recognizable_people,
+        private_property_or_restricted_location=parsed.private_property or draft.rights.private_property_or_restricted_location,
+        visible_logos_or_trademarks=parsed.logos or draft.rights.visible_logos_or_trademarks,
+        third_party_copyrighted_content=parsed.third_party_content or draft.rights.third_party_copyrighted_content,
+        release_evidence=parsed.release_evidence or draft.rights.release_evidence,
+    )
+    return edit_draft(
+        draft,
+        title=parsed.title,
+        keywords=tuple(parsed.keyword) if parsed.keyword is not None else None,
+        notes=parsed.notes,
+        rights=rights,
+    )
 
 
 def _load_dictionary(dictionary_path: Path) -> AcceptedSpellings:

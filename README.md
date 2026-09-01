@@ -30,3 +30,10 @@ After you have confirmed a proper name or intentional spelling, save it to an ex
 python stock_photo_scout.py accept-spelling local_drafts\accepted_spellings.json Todaiji
 python stock_photo_scout.py review-draft local_drafts\img_0530.json --dictionary local_drafts\accepted_spellings.json
 ```
+
+Create a new draft outside the selected photo folder, then explicitly update it as you review the photo:
+
+```powershell
+python stock_photo_scout.py create-draft "D:\Photos" IMG_0600.jpg local_drafts\img_0600.json --title "Temple at dawn" --keyword temple --keyword dawn
+python stock_photo_scout.py edit-draft "D:\Photos" local_drafts\img_0600.json --logos unknown --notes "Check logos before any submission"
+```
