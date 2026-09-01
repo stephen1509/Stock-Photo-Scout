@@ -16,6 +16,14 @@ from .drafts import (
     update_draft_json,
 )
 from .candidate_dashboard import CandidateDashboardSettings, serve_candidate_dashboard
+from .preparation import (
+    PreparationRecord,
+    edit_preparation,
+    evaluate_preparation,
+    preparation_from_json,
+    save_preparation_json,
+)
+from .preflight import build_preflight_packet, preflight_to_text
 from .spelling_dictionary import (
     AcceptedSpellings,
     save_spelling_dictionary,
@@ -63,6 +71,28 @@ def build_parser() -> argparse.ArgumentParser:
     dashboard.add_argument("--previews-dir", type=Path, default=Path("local_previews"))
     dashboard.add_argument("--workspace", type=Path, default=Path("local_workspace") / "candidates.json")
     dashboard.add_argument("--port", type=int, default=8765)
+
+    create_prep = commands.add_parser("create-preparation", help="Create local metadata/editor preparation outside the source tree.")
+    create_prep.add_argument("source_root", type=Path)
+    create_prep.add_argument("relative_path")
+    create_prep.add_argument("destination", type=Path)
+    _add_preparation_fields(create_prep)
+
+    edit_prep = commands.add_parser("edit-preparation", help="Update an existing local preparation record.")
+    edit_prep.add_argument("source_root", type=Path)
+    edit_prep.add_argument("preparation", type=Path)
+    _add_preparation_fields(edit_prep)
+
+    review_prep = commands.add_parser("review-preparation", help="Show missing human-preparation fields.")
+    review_prep.add_argument("preparation", type=Path)
+
+    preflight = commands.add_parser("preflight", help="Print a local manual-upload preflight packet; performs no upload.")
+    preflight.add_argument("preparation", type=Path)
+    preflight.add_argument("--state", required=True, choices=("skip","maybe","shortlist","edit","metadata-ready","submission-ready"))
+    preflight.add_argument("--technical-observation", action="append", default=[])
+    preflight.add_argument("--rights-prompt", action="append", default=[])
+    preflight.add_argument("--preview-integrity", choices=("unknown","match","mismatch"), default="unknown")
+    preflight.add_argument("--current-requirements-reviewed", action="store_true")
     return parser
 
 
@@ -78,6 +108,14 @@ def main(arguments: Sequence[str] | None = None) -> int:
         return _create_draft(parsed)
     if parsed.command == "edit-draft":
         return _edit_draft(parsed)
+    if parsed.command == "create-preparation":
+        return _create_preparation(parsed)
+    if parsed.command == "edit-preparation":
+        return _edit_preparation(parsed)
+    if parsed.command == "review-preparation":
+        return _review_preparation(parsed.preparation)
+    if parsed.command == "preflight":
+        return _preflight(parsed)
     if parsed.command == "dashboard":
         serve_candidate_dashboard(
             CandidateDashboardSettings.create(
@@ -159,6 +197,79 @@ def _apply_draft_fields(draft: CandidateDraft, parsed: argparse.Namespace) -> Ca
         notes=parsed.notes,
         rights=rights,
     )
+
+
+def _add_preparation_fields(command: argparse.ArgumentParser) -> None:
+    command.add_argument("--title")
+    command.add_argument("--description")
+    command.add_argument("--keyword", action="append")
+    command.add_argument("--category", action="append")
+    command.add_argument("--route", choices=("undecided", "commercial", "editorial"))
+    command.add_argument("--editor-target", choices=("none", "darktable", "rawtherapee", "gimp", "other"))
+    command.add_argument("--working-export-relative-path")
+    command.add_argument("--preparation-notes")
+
+
+def _apply_preparation_fields(record: PreparationRecord, parsed: argparse.Namespace) -> PreparationRecord:
+    changes = {}
+    for argument, field in (
+        ("title", "title"),
+        ("description", "description"),
+        ("route", "route"),
+        ("editor_target", "editor_target"),
+        ("working_export_relative_path", "working_export_relative_path"),
+        ("preparation_notes", "notes"),
+    ):
+        value = getattr(parsed, argument, None)
+        if value is not None:
+            changes[field] = value
+    if getattr(parsed, "keyword", None) is not None:
+        changes["keywords"] = tuple(parsed.keyword)
+    if getattr(parsed, "category", None) is not None:
+        changes["categories"] = tuple(parsed.category)
+    return edit_preparation(record, **changes)
+
+
+def _create_preparation(parsed: argparse.Namespace) -> int:
+    record = _apply_preparation_fields(PreparationRecord(parsed.relative_path), parsed)
+    saved = save_preparation_json(record, parsed.destination, parsed.source_root)
+    print(f"Local preparation created: {saved}")
+    return 0
+
+
+def _edit_preparation(parsed: argparse.Namespace) -> int:
+    record = preparation_from_json(parsed.preparation.read_text(encoding="utf-8"))
+    updated = _apply_preparation_fields(record, parsed)
+    saved = save_preparation_json(updated, parsed.preparation, parsed.source_root, overwrite=True)
+    print(f"Local preparation updated: {saved}")
+    return 0
+
+
+def _review_preparation(path: Path) -> int:
+    record = preparation_from_json(path.read_text(encoding="utf-8"))
+    report = evaluate_preparation(record)
+    print(f"Candidate: {report.relative_path}")
+    if not report.prompts:
+        print("No local preparation prompts.")
+        return 0
+    for prompt in report.prompts:
+        print(f"{prompt.code}: {prompt.explanation}")
+    return 0
+
+
+def _preflight(parsed: argparse.Namespace) -> int:
+    record = preparation_from_json(parsed.preparation.read_text(encoding="utf-8"))
+    integrity = {"unknown": None, "match": True, "mismatch": False}[parsed.preview_integrity]
+    packet = build_preflight_packet(
+        record,
+        candidate_state=parsed.state,
+        technical_observations=parsed.technical_observation,
+        unresolved_rights_prompts=parsed.rights_prompt,
+        preview_integrity_confirmed=integrity,
+        current_requirements_reviewed=parsed.current_requirements_reviewed,
+    )
+    print(preflight_to_text(packet), end="")
+    return 0
 
 
 def _load_dictionary(dictionary_path: Path) -> AcceptedSpellings:
