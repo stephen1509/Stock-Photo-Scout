@@ -24,6 +24,7 @@ from .preparation import (
     save_preparation_json,
 )
 from .preflight import build_preflight_packet, preflight_to_text
+from .image_analysis import analysis_from_json, analysis_observations
 from .spelling_dictionary import (
     AcceptedSpellings,
     save_spelling_dictionary,
@@ -90,6 +91,7 @@ def build_parser() -> argparse.ArgumentParser:
     preflight.add_argument("preparation", type=Path)
     preflight.add_argument("--state", required=True, choices=("skip","maybe","shortlist","edit","metadata-ready","submission-ready"))
     preflight.add_argument("--technical-observation", action="append", default=[])
+    preflight.add_argument("--analysis", type=Path, help="Optional saved local analysis JSON for this same candidate.")
     preflight.add_argument("--rights-prompt", action="append", default=[])
     preflight.add_argument("--preview-integrity", choices=("unknown","match","mismatch"), default="unknown")
     preflight.add_argument("--current-requirements-reviewed", action="store_true")
@@ -260,10 +262,16 @@ def _review_preparation(path: Path) -> int:
 def _preflight(parsed: argparse.Namespace) -> int:
     record = preparation_from_json(parsed.preparation.read_text(encoding="utf-8"))
     integrity = {"unknown": None, "match": True, "mismatch": False}[parsed.preview_integrity]
+    technical_observations = list(parsed.technical_observation)
+    if parsed.analysis is not None:
+        analysis = analysis_from_json(parsed.analysis.read_text(encoding="utf-8"))
+        if analysis.relative_path != record.relative_path:
+            raise ValueError("Analysis candidate does not match the preparation candidate.")
+        technical_observations.extend(analysis_observations(analysis))
     packet = build_preflight_packet(
         record,
         candidate_state=parsed.state,
-        technical_observations=parsed.technical_observation,
+        technical_observations=technical_observations,
         unresolved_rights_prompts=parsed.rights_prompt,
         preview_integrity_confirmed=integrity,
         current_requirements_reviewed=parsed.current_requirements_reviewed,
