@@ -14,6 +14,7 @@ from .preparation import (
     preparation_from_json, save_preparation_json,
 )
 from .preflight import build_preflight_packet, preflight_to_text
+from .image_analysis import analysis_from_json, analysis_observations
 
 @dataclass(frozen=True)
 class CandidateDashboardSettings:
@@ -21,23 +22,28 @@ class CandidateDashboardSettings:
     preview_root: Path
     workspace_manifest: Path
     preparation_directory: Path
+    analysis_directory: Path
 
     @classmethod
     def create(cls, source_root, drafts_directory, dictionary_path,
                preview_root=Path("local_previews"),
                workspace_manifest=Path("local_workspace")/"candidates.json",
-               preparation_directory=Path("local_preparation")):
+               preparation_directory=Path("local_preparation"),
+               analysis_directory=Path("local_analysis")):
         drafts=DashboardSettings.create(source_root,drafts_directory,dictionary_path)
         preview=Path(preview_root).expanduser().resolve(strict=False)
         manifest=Path(workspace_manifest).expanduser().resolve(strict=False)
         preparation=Path(preparation_directory).expanduser().resolve(strict=False)
+        analysis=Path(analysis_directory).expanduser().resolve(strict=False)
         if preview.is_relative_to(drafts.source_root):
             raise ValueError("Preview workspace must be outside the selected source-photo folder.")
         if manifest.is_relative_to(drafts.source_root) or manifest.suffix.lower()!=".json":
             raise ValueError("Candidate workspace manifest must be external JSON.")
         if preparation.is_relative_to(drafts.source_root):
             raise ValueError("Preparation directory must be outside the selected source-photo folder.")
-        return cls(drafts,preview,manifest,preparation)
+        if analysis.is_relative_to(drafts.source_root):
+            raise ValueError("Analysis directory must be outside the selected source-photo folder.")
+        return cls(drafts,preview,manifest,preparation,analysis)
 
 class CandidateDashboard:
     def __init__(self,settings):
@@ -161,6 +167,20 @@ class CandidateDashboard:
             save_preparation_json(updated,current,self.settings.drafts.source_root,overwrite=True)
         return self.load_preparation({"relative_path":updated.relative_path})
 
+    def _find_analysis(self, relative_path):
+        if not self.settings.analysis_directory.exists():
+            return None
+        for path in sorted(self.settings.analysis_directory.glob("*.json")):
+            if path.is_symlink() or not path.is_file():
+                continue
+            try:
+                analysis=analysis_from_json(path.read_text(encoding="utf-8"))
+            except (ValueError, json.JSONDecodeError, TypeError, KeyError):
+                continue
+            if analysis.relative_path == relative_path:
+                return analysis
+        return None
+
     def build_preflight(self, payload):
         prep=self.load_preparation(payload)["preparation"]
         record=PreparationRecord(
@@ -174,10 +194,14 @@ class CandidateDashboard:
         integrity={"unknown":None,"match":True,"mismatch":False}.get(payload.get("preview_integrity","unknown"))
         if payload.get("preview_integrity","unknown") not in ("unknown","match","mismatch"):
             raise ValueError("Unsupported preview_integrity value.")
+        technical=list(payload.get("technical_observations",()))
+        saved_analysis=self._find_analysis(record.relative_path)
+        if saved_analysis is not None:
+            technical.extend(analysis_observations(saved_analysis))
         packet=build_preflight_packet(
             record,
             candidate_state=state,
-            technical_observations=payload.get("technical_observations",()),
+            technical_observations=technical,
             unresolved_rights_prompts=payload.get("rights_prompts",()),
             preview_integrity_confirmed=integrity,
             current_requirements_reviewed=payload.get("current_requirements_reviewed") is True,
