@@ -15,11 +15,14 @@ The project includes:
 - localhost candidate gallery;
 - SHA-256 preview-integrity/staleness verification;
 - decoder-independent luminance/clipping/sharpness/noise signal engine;
+- consent-gated analysis orchestration and external analysis records;
+- automatic same-candidate analysis → preflight handoff;
+- optional bounded Pillow-compatible decoder adapter (not installed or required yet);
 - local preparation records for title, description, keywords, categories, route, editor and working export;
 - manual preflight packet generation;
 - CLI and browser workflows.
 
-**63/63 tests pass** on Python 3.12.
+**77/77 tests pass** on Python 3.12.
 
 ## Safety
 
@@ -47,6 +50,7 @@ Defaults:
 - previews: `local_previews`
 - candidate workspace: `local_workspace\candidates.json`
 - preparation: `local_preparation`
+- analysis: `local_analysis`
 - port: `8765`
 
 ## Preparation CLI
