@@ -60,7 +60,7 @@ class PillowAdapterTests(unittest.TestCase):
         self.assertEqual(module.opened, [Path("synthetic.jpg")])
 
     def test_downsamples_large_dimensions_to_configured_bound(self):
-        image = FakeImage((4000, 2000), [100] * (4000 * 2000))
+        image = FakeImage((4000, 2000), [100])
         module = FakeModule(image)
         decoder = PillowLuminanceDecoder(max_analysis_dimension=1000, image_module=module)
 
