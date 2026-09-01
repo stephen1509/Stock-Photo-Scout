@@ -19,7 +19,7 @@ Current Dreamstime workflow and Windows tools researched; `RESEARCH_BRIEF_2026-0
 Candidate states, consented external previews, gallery/dashboard, preview integrity/staleness verification and safety hardening are implemented. Formal closure waits for a small real-photo Windows trial and original-file integrity confirmation.
 
 ## 0.05B — Local technical/visual suggestions — core implemented / real-image calibration pending
-Pure decoder-independent luminance, clipping, sharpness-proxy and noise-proxy engine is implemented and tested. Next requires a reviewed local decoder and real selected photographs.
+Pure decoder-independent luminance, clipping, sharpness-proxy and noise-proxy engine is implemented and tested. Consent-gated decoder orchestration, external analysis persistence, analysis→preflight handoff, and a bounded optional Pillow-compatible adapter are implemented. Next requires approval/installation of a real local decoder and real selected photographs.
 
 ## 0.05C — Metadata and editor handoff — local foundation implemented
 Human-approved title/description/keywords/categories, commercial/editorial choice, editor target, working-export path, local persistence, CLI and dashboard Preparation page are implemented. Real editor handoff remains to be proven on the PC.
