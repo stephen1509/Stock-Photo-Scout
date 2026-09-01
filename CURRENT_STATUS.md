@@ -60,3 +60,24 @@ Still to do inside 0.05A:
 - 0.05C — metadata and editor handoff;
 - 0.05D — Dreamstime preflight/manual submission packet;
 - 0.05E — optional AI/cloud/service integrations only after separate approval.
+
+
+## 0.05A repository-wide verification — 2026-09-01
+
+A temporary GitHub Actions workflow ran the exact repository checkpoint on Python 3.12 with:
+
+`python -m unittest discover -s tests -v`
+
+The first run exposed one cross-platform safety regression: Windows drive-qualified candidate paths such as `C:outside.jpg` were not rejected when tests ran on POSIX. The validator was hardened with host-independent Windows-path detection.
+
+Verification after the fix:
+- **47 tests run**
+- **47 passed**
+- **0 failures / 0 errors**
+- verified commit: `fa6ab2861ad6df7f061f4540767ccca012a3b974`
+- temporary CI workflow removed immediately after verification
+
+Remaining 0.05A gates:
+1. small real-photo-folder trial on the user's Windows PC;
+2. verify originals remain unchanged after that trial;
+3. decide whether full-size local preview copies are acceptable or whether resized thumbnails should be added.
