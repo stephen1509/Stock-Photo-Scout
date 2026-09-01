@@ -40,3 +40,8 @@ Human review remains decisive. Nothing in 0.05A makes legal, rights, release, ma
 ## Change control
 
 Read this file, `CURRENT_STATUS.md`, `RESEARCH_BRIEF_2026-09-01.md`, and `APP_OPERATING_PLAN.md` before changing scope. Update authority/status when a checkpoint changes. GitHub checkpoints must contain only reviewed code/docs safe for the public repository.
+
+
+## Verification gate update — 2026-09-01
+
+0.05A code has passed repository-wide verification: 47/47 unit tests on Python 3.12 after fixing host-independent rejection of Windows drive-qualified candidate paths. This does **not** close 0.05A. Closure still requires a small explicitly selected real-photo-folder trial, post-trial original-file integrity confirmation, and a decision on full-size preview copies versus resized thumbnails.
