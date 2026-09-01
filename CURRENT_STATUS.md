@@ -42,8 +42,14 @@ Implemented:
 - no Dreamstime acceptance thresholds or hidden quality score;
 - synthetic tests.
 
+Additional offline work completed:
+- consent-gated decoder orchestration is implemented;
+- analysis JSON persistence/loading is external and Git-ignored;
+- saved analysis feeds CLI/dashboard preflight only when candidate paths match;
+- an optional bounded Pillow-compatible adapter is implemented and tested against a synthetic backend, but Pillow is not installed or declared required.
+
 Still required:
-- select/approve a local image-decoding path;
+- select/approve and install a real local image-decoding dependency on the Windows PC;
 - decode actual user-selected images;
 - calibrate measurements on real photographs;
 - only then consider additional signals such as horizon/composition/dust.
@@ -92,8 +98,8 @@ The final offline development state was verified on Python 3.12 with:
 `python -m unittest discover -s tests -v`
 
 Result:
-- **63 tests run**
-- **63 passed**
+- **77 tests run**
+- **77 passed**
 - **0 failures / 0 errors**
 - temporary GitHub Actions verification workflows were removed after use.
 
