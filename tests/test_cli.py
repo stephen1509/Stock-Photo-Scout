@@ -12,6 +12,8 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 from stock_photo_scout.cli import main
 from stock_photo_scout.drafts import CandidateDraft, draft_to_json
 from stock_photo_scout.drafts import draft_from_json
+from stock_photo_scout.image_analysis import CandidateAnalysis, save_analysis_json
+from stock_photo_scout.visual_signals import VisualSignalReport
 
 
 class CommandLineReviewTests(unittest.TestCase):
@@ -131,6 +133,42 @@ class CommandLineReviewTests(unittest.TestCase):
                 )
             self.assertIn("Local packet complete: YES", output.getvalue())
             self.assertFalse(prep.is_relative_to(source))
+
+    def test_preflight_can_include_matching_saved_analysis(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root=Path(temporary_directory); source=root/"photos"; source.mkdir()
+            prep=root/"local_preparation"/"photo.json"
+            with contextlib.redirect_stdout(io.StringIO()):
+                main([
+                    "create-preparation",str(source),"photo.jpg",str(prep),
+                    "--title","Temple","--description","Temple exterior",
+                    "--keyword","temple","--route","editorial"
+                ])
+            analysis_path=root/"local_analysis"/"photo.json"
+            analysis=CandidateAnalysis(
+                "photo.jpg","SyntheticDecoder",
+                VisualSignalReport(10,10,120.0,0.0,0.0,5.0,2.0,())
+            )
+            save_analysis_json(analysis,analysis_path,source)
+            output=io.StringIO()
+            with contextlib.redirect_stdout(output):
+                main([
+                    "preflight",str(prep),"--state","submission-ready",
+                    "--analysis",str(analysis_path),"--current-requirements-reviewed"
+                ])
+            self.assertIn("Mean luminance: 120.0000.",output.getvalue())
+
+            wrong=CandidateAnalysis(
+                "other.jpg","SyntheticDecoder",
+                VisualSignalReport(10,10,120.0,0.0,0.0,5.0,2.0,())
+            )
+            wrong_path=root/"local_analysis"/"wrong.json"
+            save_analysis_json(wrong,wrong_path,source)
+            with self.assertRaises(ValueError):
+                main([
+                    "preflight",str(prep),"--state","submission-ready",
+                    "--analysis",str(wrong_path)
+                ])
 
 
 if __name__ == "__main__":
