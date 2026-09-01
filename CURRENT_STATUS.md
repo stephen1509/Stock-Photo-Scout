@@ -4,7 +4,7 @@
 
 The local scanner, deterministic catalog/metadata foundation, metadata-only review prompts, and opt-in SHA-256 exact-duplicate grouping are complete and locally verified. Originals remain read-only.
 
-## Checkpoint 0.04 — Stock readiness (complete foundation)
+## Checkpoint 0.04 — Stock readiness foundation (complete)
 
 Implemented and verified:
 
@@ -25,24 +25,23 @@ The resulting end-to-end implementation plan is recorded in `APP_OPERATING_PLAN.
 
 ## Checkpoint 0.05A — Local candidate workspace (in progress)
 
-First tested implementation slice completed:
+Implemented and focused-tested:
 
-- new local candidate-workspace model;
+- local candidate-workspace model;
 - human-controlled states: `skip`, `maybe`, `shortlist`, `edit`, `metadata-ready`, `submission-ready`;
 - deterministic workspace JSON outside the source tree;
 - explicit consent required before preview byte reads;
-- supported JPEG/PNG/TIFF preview copies created outside the source tree;
+- supported JPEG/PNG/TIFF preview copies outside the source tree;
 - preview copies are exclusive/non-overwriting;
 - traversal, source-tree destination, symlink, unsupported-type, and invalid-state safeguards;
-- focused unit tests verify source-byte preservation and safe persistence.
+- standalone no-install workspace CLI for preview creation, candidate-state updates, and manifest display.
 
-Focused 0.05A tests: 4 passed.
+Focused 0.05A tests: **6 passed**.
 
 Still to do inside 0.05A:
 
-- connect the workspace model to the project CLI/dashboard;
-- add a local visual gallery/browser flow;
-- decide whether to continue with full-size preview copies only or introduce a reviewed local thumbnail-decoding dependency;
+- integrate the workspace into the main localhost dashboard/gallery;
+- decide whether full-size preview copies are sufficient or whether to introduce a reviewed local thumbnail-decoding dependency;
 - run an explicitly approved small real-photo-folder trial and verify originals remain unchanged.
 
 ## Later phases
