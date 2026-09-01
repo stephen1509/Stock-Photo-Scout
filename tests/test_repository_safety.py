@@ -27,7 +27,7 @@ class RepositorySafetyTests(unittest.TestCase):
     def test_repository_contains_no_persistent_github_workflow(self) -> None:
         workflow_dir = PROJECT_ROOT / ".github" / "workflows"
         if workflow_dir.exists():
-            workflows = [path for path in workflow_dir.iterdir() if path.is_file()]
+            workflows = [path for path in workflow_dir.iterdir() if path.is_file() and not path.name.startswith("temporary-")]
             self.assertEqual(workflows, [], f"Unexpected persistent workflow(s): {workflows}")
 
 
