@@ -11,6 +11,7 @@ local_drafts/
 local_previews/
 local_workspace/
 local_preparation/
+local_analysis/
 dashboard.log
 dashboard.err.log
 *.sqlite
