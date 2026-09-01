@@ -1,6 +1,6 @@
 # Stock Photo Scout — Current Authority
 
-Status: Checkpoint 0.01 (2026-08-31)
+Status: Checkpoint 0.04 (in progress, 2026-08-31)
 
 ## Purpose
 
@@ -17,7 +17,13 @@ Stock Photo Scout is a local Windows assistant for reviewing an existing photo c
 
 ## Current scope
 
-Checkpoint 0.01 establishes product rules, technical boundaries, and a local-only candidate-file inventory. It does not inspect pixels or EXIF, score photos, detect duplicates, create listings, or connect to Dreamstime.
+Checkpoint 0.04 adds editable local title/keyword drafts and user-supplied commercial-readiness observations. It may prompt manual follow-up but does not make legal, rights, release, or marketplace acceptance determinations; it does not create listings or connect to Dreamstime.
+
+The catalog stores relative paths, file facts, dimensions, orientation, original capture-time text, camera make/model, and lens model. GPS, owner/serial identifiers, comments, thumbnails, and arbitrary EXIF fields remain out of scope.
+
+Technical review thresholds are caller-configured prompts, not marketplace requirements or acceptance decisions. Human review remains decisive.
+
+Title/keyword drafts and readiness observations are local, optional, and excluded from Git. They are not generated from images or sent to external services.
 
 ## Change control
 

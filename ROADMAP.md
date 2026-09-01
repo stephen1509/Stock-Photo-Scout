@@ -4,15 +4,15 @@
 
 Project authority, safe boundaries, local read-only file inventory, and tests.
 
-## 0.02 — Local catalog and metadata
+## 0.02 — Local catalog and metadata (complete)
 
 Define a local-only catalog and extract safe technical metadata from a small user-selected sample. No photo changes or uploads.
 
-## 0.03 — Review signals
+## 0.03 — Review signals (complete)
 
 Add explainable duplicate grouping and basic technical-quality flags. Human review remains decisive.
 
-## 0.04 — Stock readiness
+## 0.04 — Stock readiness (in progress)
 
 Add opt-in commercial-readiness checks and editable title/keyword drafting.
 

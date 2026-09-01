@@ -6,5 +6,7 @@ __pycache__/
 photo_sources/
 working_copies/
 exports/
+local_catalogs/
+local_drafts/
 *.sqlite
 *.sqlite3
