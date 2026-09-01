@@ -15,7 +15,7 @@ from .drafts import (
     save_draft_json,
     update_draft_json,
 )
-from .dashboard import DashboardSettings, serve_dashboard
+from .candidate_dashboard import CandidateDashboardSettings, serve_candidate_dashboard
 from .spelling_dictionary import (
     AcceptedSpellings,
     save_spelling_dictionary,
@@ -56,10 +56,12 @@ def build_parser() -> argparse.ArgumentParser:
     edit.add_argument("draft", type=Path, help="Existing local draft JSON path.")
     _add_draft_fields(edit)
 
-    dashboard = commands.add_parser("dashboard", help="Start a local browser dashboard for reviewing local drafts.")
+    dashboard = commands.add_parser("dashboard", help="Start the local candidate gallery and draft workspace.")
     dashboard.add_argument("source_root", type=Path, help="Selected photo-source folder; it is never modified.")
     dashboard.add_argument("--drafts-dir", type=Path, default=Path("local_drafts"))
     dashboard.add_argument("--dictionary", type=Path, default=Path("local_drafts") / "accepted_spellings.json")
+    dashboard.add_argument("--previews-dir", type=Path, default=Path("local_previews"))
+    dashboard.add_argument("--workspace", type=Path, default=Path("local_workspace") / "candidates.json")
     dashboard.add_argument("--port", type=int, default=8765)
     return parser
 
@@ -77,7 +79,16 @@ def main(arguments: Sequence[str] | None = None) -> int:
     if parsed.command == "edit-draft":
         return _edit_draft(parsed)
     if parsed.command == "dashboard":
-        serve_dashboard(DashboardSettings.create(parsed.source_root, parsed.drafts_dir, parsed.dictionary), parsed.port)
+        serve_candidate_dashboard(
+            CandidateDashboardSettings.create(
+                parsed.source_root,
+                parsed.drafts_dir,
+                parsed.dictionary,
+                parsed.previews_dir,
+                parsed.workspace,
+            ),
+            parsed.port,
+        )
         return 0
     raise AssertionError(f"Unsupported command: {parsed.command}")
 
