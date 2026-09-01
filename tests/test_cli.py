@@ -91,6 +91,47 @@ class CommandLineReviewTests(unittest.TestCase):
             self.assertEqual(saved.rights.visible_logos_or_trademarks, "unknown")
             self.assertEqual(image.read_bytes(), b"source image")
 
+    def test_preparation_and_preflight_cli_are_local_only(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "photos"
+            source.mkdir()
+            prep = root / "local_preparation" / "photo.json"
+
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(
+                    main([
+                        "create-preparation", str(source), "photo.jpg", str(prep),
+                        "--title", "Temple",
+                        "--description", "Temple exterior",
+                        "--keyword", "temple",
+                        "--route", "editorial",
+                    ]),
+                    0,
+                )
+                self.assertEqual(
+                    main([
+                        "edit-preparation", str(source), str(prep),
+                        "--editor-target", "darktable",
+                        "--working-export-relative-path", "exports/photo-final.jpg",
+                    ]),
+                    0,
+                )
+
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                self.assertEqual(
+                    main([
+                        "preflight", str(prep),
+                        "--state", "submission-ready",
+                        "--preview-integrity", "match",
+                        "--current-requirements-reviewed",
+                    ]),
+                    0,
+                )
+            self.assertIn("Local packet complete: YES", output.getvalue())
+            self.assertFalse(prep.is_relative_to(source))
+
 
 if __name__ == "__main__":
     unittest.main()
