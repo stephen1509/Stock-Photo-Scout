@@ -7,7 +7,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from stock_photo_scout.image_analysis import analyze_candidate, analysis_observations, analysis_to_json, save_analysis_json
+from stock_photo_scout.image_analysis import analyze_candidate, analysis_from_json, analysis_observations, analysis_to_json, save_analysis_json
 from stock_photo_scout.visual_signals import VisualSignalPolicy
 
 
@@ -85,6 +85,7 @@ class CandidateAnalysisTests(unittest.TestCase):
             serialized = destination.read_text(encoding="utf-8")
             self.assertEqual(json.loads(serialized)["schema_version"], 1)
             self.assertEqual(serialized, analysis_to_json(result))
+            self.assertEqual(analysis_from_json(serialized), result)
             self.assertNotIn(str(source), serialized)
             with self.assertRaises(FileExistsError):
                 save_analysis_json(result, destination, source)
