@@ -21,6 +21,7 @@ class RepositorySafetyTests(unittest.TestCase):
             "local_previews/",
             "local_workspace/",
             "local_preparation/",
+            "local_analysis/",
         }
         self.assertEqual(required - ignored, set())
 
