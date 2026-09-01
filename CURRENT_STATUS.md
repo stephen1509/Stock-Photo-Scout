@@ -1,83 +1,102 @@
 # Current Status
 
-## Checkpoints 0.01–0.03 — complete
+## Checkpoints 0.01–0.04 — complete
 
-The local scanner, deterministic catalog/metadata foundation, metadata-only review prompts, and opt-in SHA-256 exact-duplicate grouping are complete and locally verified. Originals remain read-only.
-
-## Checkpoint 0.04 — Stock readiness foundation (complete)
-
-Implemented and verified:
-
-- editable local title, keyword, note, and rights-observation drafts;
-- explainable readiness prompts;
-- offline spelling review and explicit accepted-spelling dictionary;
-- CLI create/edit/review flows;
-- localhost-only draft dashboard;
-- non-overwriting local persistence outside source folders.
-
-One user-selected candidate has a local draft and recorded observations. Remaining prompts require human review; no legal or marketplace conclusion is made.
+The read-only scanner, deterministic catalog/metadata foundation, exact-duplicate grouping, explainable technical prompts, local title/keyword/notes/rights drafts, spelling support, CLI workflows, and localhost draft dashboard are complete.
 
 ## Research and operating plan — complete (2026-09-01)
 
-The requested current Dreamstime/tool-ecosystem research was completed and recorded in `RESEARCH_BRIEF_2026-09-01.md`.
+Current Dreamstime contributor workflow and the Windows tool ecosystem were researched and recorded in `RESEARCH_BRIEF_2026-09-01.md`. The approved phased operating/build plan is `APP_OPERATING_PLAN.md`.
 
-The resulting end-to-end implementation plan is recorded in `APP_OPERATING_PLAN.md`. Research is no longer the next action.
+## 0.05A — Local candidate workspace
 
-## Checkpoint 0.05A — Local candidate workspace (in progress)
+Offline implementation is complete.
 
 Implemented:
-
-- local candidate-workspace model;
 - human-controlled states: `skip`, `maybe`, `shortlist`, `edit`, `metadata-ready`, `submission-ready`;
-- deterministic workspace JSON outside the source tree;
-- explicit consent required before preview byte reads;
-- supported JPEG/PNG/TIFF preview copies outside the source tree;
-- preview copies are exclusive/non-overwriting;
-- traversal, source-tree destination, symlink, unsupported-type, and invalid-state safeguards;
-- standalone no-install workspace CLI;
-- candidate gallery layered over the existing localhost draft dashboard;
-- the normal `dashboard` command now launches the candidate gallery;
-- browser state controls persist to the local workspace manifest;
-- the browser can serve only derived preview copies, never originals;
-- preview creation requires an explicit browser confirmation and consent flag.
+- deterministic local workspace JSON outside source folders;
+- explicit consent before source image-byte reads;
+- non-overwriting JPEG/PNG/TIFF preview copies outside the source tree;
+- candidate gallery layered over the localhost dashboard;
+- original images are never served directly;
+- explicit preview integrity/staleness verification with SHA-256;
+- cross-platform path validation, traversal rejection, symlink protection, and source-tree write refusal;
+- no-install CLI and browser controls.
 
-Verification:
+Still required before formally closing 0.05A:
+1. a small explicitly selected real-photo-folder trial on the Windows PC;
+2. post-trial verification that originals remain unchanged;
+3. decide from the real trial whether full-size byte-for-byte preview copies are sufficient or resized thumbnails are worth introducing.
 
-- the original 0.05A workspace/CLI focused suite had **6 passing tests**;
-- the candidate-dashboard integration has **4 additional focused passing tests** in an isolated compatibility harness;
-- those integration tests cover source-byte preservation, consent enforcement, persisted state, external workspace paths, and traversal rejection.
-- a complete repository-wide regression run is still required on the working PC before 0.05A is closed.
+## 0.05B — Local technical/visual suggestions
 
-Still to do inside 0.05A:
+Offline core implemented.
 
-- run the full repository test suite on the working copy;
-- run an explicitly approved small real-photo-folder trial and verify originals remain unchanged;
-- decide whether full-size preview copies are sufficient or whether to introduce a reviewed local thumbnail-decoding dependency.
+Implemented:
+- a pure luminance-grid analysis engine independent of any decoder;
+- mean luminance;
+- dark/bright clipping ratios;
+- explainable sharpness proxy;
+- explainable noise proxy;
+- optional caller-configured thresholds only;
+- no Dreamstime acceptance thresholds or hidden quality score;
+- synthetic tests.
 
-## Later phases
+Still required:
+- select/approve a local image-decoding path;
+- decode actual user-selected images;
+- calibrate measurements on real photographs;
+- only then consider additional signals such as horizon/composition/dust.
 
-- 0.05B — local technical/visual suggestions;
-- 0.05C — metadata and editor handoff;
-- 0.05D — Dreamstime preflight/manual submission packet;
-- 0.05E — optional AI/cloud/service integrations only after separate approval.
+## 0.05C — Metadata and editor handoff
 
+Offline foundation implemented.
 
-## 0.05A repository-wide verification — 2026-09-01
+Implemented:
+- human-approved title, description, keywords, categories;
+- commercial/editorial human choice;
+- editor target: none/darktable/RawTherapee/GIMP/other;
+- working-export relative path;
+- notes;
+- deterministic external JSON persistence;
+- CLI create/edit/review commands;
+- localhost Preparation page per candidate.
 
-A temporary GitHub Actions workflow ran the exact repository checkpoint on Python 3.12 with:
+No editor is launched automatically and no original is modified.
+
+## 0.05D — Manual Dreamstime preflight
+
+Offline foundation implemented.
+
+Implemented:
+- local manual preflight packet;
+- preparation-field completeness prompts;
+- candidate-state check;
+- unresolved people/property/logo/release prompt support;
+- preview-integrity input;
+- current-Dreamstime-requirements-reviewed gate;
+- technical-observation collection;
+- human-readable packet and deterministic JSON;
+- CLI and localhost dashboard access.
+
+`local_packet_complete` means only that this local checklist has no recorded blockers. It does not mean legal clearance, Dreamstime eligibility, acceptance, or upload success.
+
+## 0.05E — Optional integrations
+
+Not started. Cloud/AI services, paid APIs, account access, upload assistance, or automation remain outside current authorization and require a separate explicit decision.
+
+## Verification
+
+The final offline development state was verified on Python 3.12 with:
 
 `python -m unittest discover -s tests -v`
 
-The first run exposed one cross-platform safety regression: Windows drive-qualified candidate paths such as `C:outside.jpg` were not rejected when tests ran on POSIX. The validator was hardened with host-independent Windows-path detection.
-
-Verification after the fix:
-- **47 tests run**
-- **47 passed**
+Result:
+- **63 tests run**
+- **63 passed**
 - **0 failures / 0 errors**
-- verified commit: `fa6ab2861ad6df7f061f4540767ccca012a3b974`
-- temporary CI workflow removed immediately after verification
+- temporary GitHub Actions verification workflows were removed after use.
 
-Remaining 0.05A gates:
-1. small real-photo-folder trial on the user's Windows PC;
-2. verify originals remain unchanged after that trial;
-3. decide whether full-size local preview copies are acceptable or whether resized thumbnails should be added.
+## Current genuine blocker
+
+Further meaningful visual-development validation now requires the Windows PC and an explicitly selected real photo folder. Until then, no source photographs need to be read or modified.
