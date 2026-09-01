@@ -56,3 +56,5 @@ Implemented with synthetic fixtures only:
 One user-selected candidate now has a local draft and recorded rights observations. Its remaining prompts require manual review; no rights or marketplace conclusion has been made.
 
 Not yet started: commercial-readiness checks; quality scoring beyond technical prompts; title/keyword/release workflows; Dreamstime connection or submission; paid services, cloud processing, CI, and deployment.
+
+The next user-directed ChatGPT session is a thorough research-and-planning phase for Dreamstime and the wider photography-tool ecosystem. Its required scope, safety gates, and deliverables are saved in `NEXT_CHATGPT_ACTION.md`; it does not itself authorize installations, cloud/AI processing, uploads, account access, or submissions.

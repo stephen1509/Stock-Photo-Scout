@@ -16,6 +16,8 @@ Establish project authority documents, a safe local folder scanner, a metadata c
 
 Checkpoint 0.01 established project authority and a safe inventory. Checkpoint 0.02 is adding local catalog and metadata foundations without inspecting personal photos. Start with [PROJECT_AUTHORITY_CURRENT.md](PROJECT_AUTHORITY_CURRENT.md), then [CURRENT_STATUS.md](CURRENT_STATUS.md).
 
+The next user-directed research session is defined in [NEXT_CHATGPT_ACTION.md](NEXT_CHATGPT_ACTION.md).
+
 ## Local draft review
 
 Review a local draft without opening its source photo:

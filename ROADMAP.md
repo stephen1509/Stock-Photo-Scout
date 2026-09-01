@@ -16,8 +16,8 @@ Add explainable duplicate grouping and basic technical-quality flags. Human revi
 
 Add opt-in commercial-readiness checks and editable title/keyword drafting.
 
-## 0.05 — Dreamstime preflight
+## 0.05 — Research, tool selection, and Dreamstime preflight
 
-Confirm current Dreamstime rules from authoritative sources and map them to a local preflight checklist. Keep submissions manual unless separately authorized.
+Thoroughly research current Dreamstime contributor workflow and available local/cloud tools for selection, captioning, keywording, edit recommendations, editor handoff, and submission preparation. Compare privacy, cost, Windows support, integration feasibility, and policy risk before selecting a stack. Confirm current Dreamstime rules from authoritative sources and map them to a local preflight checklist. Keep submissions manual unless separately authorized.
 
 No phase authorizes paid APIs, cloud processing, automatic submission, or deployment without a separate decision.
