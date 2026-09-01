@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, replace
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 import tempfile
 from typing import Iterable, Literal
 
@@ -56,7 +56,16 @@ class CandidateDraft:
 
     def __post_init__(self) -> None:
         candidate_path = Path(self.relative_path)
-        if not self.relative_path or candidate_path.is_absolute() or candidate_path.drive or ".." in candidate_path.parts:
+        windows_path = PureWindowsPath(self.relative_path)
+        if (
+            not self.relative_path
+            or candidate_path.is_absolute()
+            or candidate_path.drive
+            or windows_path.drive
+            or windows_path.is_absolute()
+            or ".." in candidate_path.parts
+            or ".." in windows_path.parts
+        ):
             raise ValueError("relative_path must be a non-empty path inside the selected source folder.")
         if not isinstance(self.title, str) or not isinstance(self.notes, str):
             raise TypeError("title and notes must be text.")
