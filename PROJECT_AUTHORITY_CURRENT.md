@@ -1,6 +1,6 @@
 # Stock Photo Scout — Current Authority
 
-Status: Checkpoint 0.05A (implementation in progress, 2026-09-01)
+Status: Offline 0.05A–0.05D foundation implemented; real-photo validation pending (2026-09-01)
 
 ## Purpose
 
@@ -8,40 +8,41 @@ Stock Photo Scout is a local Windows assistant for reviewing an existing photo c
 
 ## Current authority
 
-The Dreamstime/tool research phase is complete. The current research record is `RESEARCH_BRIEF_2026-09-01.md`, and `APP_OPERATING_PLAN.md` is the approved operating/build plan.
+The Dreamstime/tool research is complete. `RESEARCH_BRIEF_2026-09-01.md` and `APP_OPERATING_PLAN.md` remain the research and operating authorities.
 
-Implementation now follows phases 0.05A–0.05E. The immediate phase is 0.05A: an explicit local candidate workspace with read-only source handling, consented preview access, and human-controlled candidate states.
+Offline-safe development has advanced through the local foundations of phases 0.05A–0.05D. The next meaningful engineering gate requires real image decoding and a small explicitly selected Windows photo-folder trial.
 
 ## Non-negotiable rules
 
 - Original photos are read-only: never rename, move, edit, upload, delete, or overwrite them.
-- Dropbox is the main working storage and source of truth for project material.
-- GitHub is for deliberate stable checkpoints, not continuous syncing or personal-photo storage.
-- Do not commit originals, private previews, credentials, generated local catalogs, local drafts, or local workspace state.
-- No paid APIs, AI/image services, marketplace submissions, cloud processing, CI, or deployment unless separately approved.
-- Unknown marketplace requirements must be confirmed, not guessed or hard-coded.
+- Dropbox is the main working storage/source of truth; GitHub is for deliberate public-safe checkpoints.
+- Never commit originals, previews, generated private catalogs/drafts/workspace/preparation state, credentials, or personal photo data.
 - Pixel/byte reads beyond metadata require an explicitly selected image/folder and consent.
-- Derived previews/working copies must live outside the source-photo tree and must never overwrite existing files.
+- Derived previews/working copies must live outside the source-photo tree and never overwrite existing files.
+- Unknown marketplace requirements remain unknown until confirmed.
+- Visual metrics are observations/suggestions, never acceptance decisions.
+- No paid APIs, cloud AI/image services, Dreamstime account access, uploads, submission automation, CI, or deployment unless separately approved.
 
-## Current scope
+## Implemented offline scope
 
-Checkpoint 0.05A adds the first candidate-workspace foundation:
+### 0.05A
+Candidate states, consented external previews, gallery/dashboard, preview integrity verification, and path/source-write safeguards.
 
-- explicit candidate states: `skip`, `maybe`, `shortlist`, `edit`, `metadata-ready`, `submission-ready`;
-- deterministic local workspace manifests outside the source tree;
-- explicit consent before source image bytes are read for a preview;
-- non-overwriting byte-for-byte preview copies outside the source tree;
-- path traversal, source-tree destination, symlink, unsupported-type, and overwrite safeguards.
+### 0.05B core
+Decoder-independent luminance, clipping, sharpness-proxy, and noise-proxy measurements using caller-configured thresholds only.
 
-This first slice deliberately avoids adding a new image-decoding dependency. Browser/gallery integration and generated thumbnail resizing remain 0.05A follow-up work.
+### 0.05C foundation
+Human metadata, commercial/editorial route, editor target, working-export tracking, local persistence, CLI and dashboard preparation workflow.
 
-Human review remains decisive. Nothing in 0.05A makes legal, rights, release, marketability, or Dreamstime acceptance determinations.
+### 0.05D foundation
+Manual preflight packet combining local preparation completeness, candidate state, technical observations, unresolved rights prompts, preview-integrity state, and a current-requirements-reviewed flag.
 
-## Change control
+## Verification
 
-Read this file, `CURRENT_STATUS.md`, `RESEARCH_BRIEF_2026-09-01.md`, and `APP_OPERATING_PLAN.md` before changing scope. Update authority/status when a checkpoint changes. GitHub checkpoints must contain only reviewed code/docs safe for the public repository.
+Final offline state: **63/63 tests passed** on Python 3.12. Temporary verification workflows were removed after completion.
 
+## Current stop condition
 
-## Verification gate update — 2026-09-01
+Do not claim 0.05A fully closed or 0.05B calibrated until a real Windows photo-folder trial is run with explicit user-selected photos and original-file integrity is confirmed afterward.
 
-0.05A code has passed repository-wide verification: 47/47 unit tests on Python 3.12 after fixing host-independent rejection of Windows drive-qualified candidate paths. This does **not** close 0.05A. Closure still requires a small explicitly selected real-photo-folder trial, post-trial original-file integrity confirmation, and a decision on full-size preview copies versus resized thumbnails.
+0.05E remains outside current authorization.
