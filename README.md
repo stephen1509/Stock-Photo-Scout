@@ -37,3 +37,13 @@ Create a new draft outside the selected photo folder, then explicitly update it 
 python stock_photo_scout.py create-draft "D:\Photos" IMG_0600.jpg local_drafts\img_0600.json --title "Temple at dawn" --keyword temple --keyword dawn
 python stock_photo_scout.py edit-draft "D:\Photos" local_drafts\img_0600.json --logos unknown --notes "Check logos before any submission"
 ```
+
+## Local visual dashboard
+
+Start the browser dashboard for a selected source folder. It shows and updates only the local draft JSON files; it does not open or modify a photo.
+
+```powershell
+python stock_photo_scout.py dashboard "D:\Photos"
+```
+
+Open the displayed `http://127.0.0.1:8765` address. Press `Ctrl+C` in that PowerShell window when you are finished.

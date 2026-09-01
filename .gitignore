@@ -8,5 +8,7 @@ working_copies/
 exports/
 local_catalogs/
 local_drafts/
+dashboard.log
+dashboard.err.log
 *.sqlite
 *.sqlite3

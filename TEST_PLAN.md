@@ -20,4 +20,6 @@ Local-dictionary tests verify that only explicitly confirmed terms suppress late
 
 Command-line tests verify that drafts can be created and explicitly updated outside their source folder while source-image bytes remain unchanged.
 
+Dashboard tests verify that only local draft JSON is listed, read, or updated; confirmed spellings remain in the local dictionary; and a dashboard cannot use a drafts directory inside the selected photo source.
+
 Tests must use non-sensitive fixtures. Real-photo samples remain outside Git.

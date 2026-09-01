@@ -29,6 +29,7 @@ from .review import (
 )
 from .scanner import CandidateImage, inventory_images
 from .spelling import SpellingPolicy, SpellingSuggestion, find_possible_spelling_issues
+from .dashboard import DashboardSettings, LocalDashboard, serve_dashboard
 from .spelling_dictionary import (
     SPELLING_DICTIONARY_SCHEMA_VERSION,
     AcceptedSpellings,
@@ -41,6 +42,7 @@ from .spelling_dictionary import (
 __all__ = [
     "CATALOG_SCHEMA_VERSION",
     "DRAFT_SCHEMA_VERSION",
+    "DashboardSettings",
     "SPELLING_DICTIONARY_SCHEMA_VERSION",
     "AcceptedSpellings",
     "CandidateImage",
@@ -52,6 +54,7 @@ __all__ = [
     "ExactDuplicateReport",
     "HashingIssue",
     "LocalCatalog",
+    "LocalDashboard",
     "MetadataStatus",
     "ReviewPolicy",
     "ReadinessPrompt",
@@ -76,6 +79,7 @@ __all__ = [
     "SpellingSuggestion",
     "update_draft_json",
     "save_catalog_json",
+    "serve_dashboard",
     "save_spelling_dictionary",
     "find_possible_spelling_issues",
     "spelling_dictionary_from_json",
