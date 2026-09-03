@@ -25,6 +25,7 @@ from .preparation import (
 )
 from .preflight import build_preflight_packet, preflight_to_text
 from .image_analysis import analysis_from_json, analysis_observations
+from .calibration import calibration_records_from_json, calibration_to_text, summarize_calibration
 from .spelling_dictionary import (
     AcceptedSpellings,
     save_spelling_dictionary,
@@ -95,6 +96,11 @@ def build_parser() -> argparse.ArgumentParser:
     preflight.add_argument("--rights-prompt", action="append", default=[])
     preflight.add_argument("--preview-integrity", choices=("unknown","match","mismatch"), default="unknown")
     preflight.add_argument("--current-requirements-reviewed", action="store_true")
+
+    calibration = commands.add_parser(
+        "calibration-report", help="Summarize local human-labelled analysis observations; does not decide suitability."
+    )
+    calibration.add_argument("calibration", type=Path, help="Git-ignored local human-label calibration JSON.")
     return parser
 
 
@@ -118,6 +124,8 @@ def main(arguments: Sequence[str] | None = None) -> int:
         return _review_preparation(parsed.preparation)
     if parsed.command == "preflight":
         return _preflight(parsed)
+    if parsed.command == "calibration-report":
+        return _calibration_report(parsed.calibration)
     if parsed.command == "dashboard":
         serve_candidate_dashboard(
             CandidateDashboardSettings.create(
@@ -277,6 +285,12 @@ def _preflight(parsed: argparse.Namespace) -> int:
         current_requirements_reviewed=parsed.current_requirements_reviewed,
     )
     print(preflight_to_text(packet), end="")
+    return 0
+
+
+def _calibration_report(path: Path) -> int:
+    records = calibration_records_from_json(path.read_text(encoding="utf-8"))
+    print(calibration_to_text(summarize_calibration(records)), end="")
     return 0
 
 

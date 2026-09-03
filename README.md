@@ -75,6 +75,18 @@ python stock_photo_scout.py preflight local_preparation\img_0600.json --state su
 
 No command above uploads or submits anything.
 
+## Local calibration summary
+
+After you provide human technical-suitability labels for locally analysed images,
+summarize the Git-ignored label file without reopening source images:
+
+```powershell
+python stock_photo_scout.py calibration-report local_analysis\human_labels_2026-09-03.json
+```
+
+This is descriptive only. It never trains a model or decides suitability, rights,
+or Dreamstime acceptance.
+
 ## Current next gate
 
 Further useful visual validation now requires:

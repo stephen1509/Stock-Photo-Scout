@@ -15,20 +15,18 @@ Read, in order:
 - Research and operating plan are complete.
 - Offline foundations 0.05A–0.05D are implemented and tested.
 - The approved Japan photo folder was used for a read-only validation.
-- One candidate received an external byte-identical preview and bounded local analysis; a five-image sample confirmed the analysis pipeline works and left sources unchanged.
+- Two candidates received external byte-identical previews and bounded local analysis; a 16-image human-labelled pass confirmed the analysis pipeline works and left sources unchanged.
 - Local drafts, previews, catalogues, preparation records, and analysis records remain Dropbox-local/Git-ignored.
 - No photo was uploaded, no Dreamstime account state was changed, and no submission was made.
 
 ## First next action
 
-Attempt a **read-only inspection of the current logged-in Dreamstime contributor interface** when a connected browser is available. Do not upload, submit, alter account settings, or reveal credentials. Confirm the current upload route, required fields, commercial/editorial choices, release workflow, and any available first-party keywording tools against the public research brief.
-
-If no connected browser is available, record that limitation and continue with local-only work.
+Dry-run a human-approved candidate with factual English metadata and a manually reviewed commercial/editorial/property-rights route. The current Dreamstime contributor upload interface has been inspected read-only: it accepts JPEGs, then gathers metadata and offers model/property-release attachment where required. Do not upload, submit, alter account settings, or reveal credentials.
 
 ## Local work that can continue safely
 
-1. Build a deliberately selected, broader **human-labelled** calibration set before using visual signals to guide review decisions.
-2. Complete the local preparation record for `IMG_0530` only after the human supplies a factual description and commercial/editorial choice.
+1. Build a deliberately selected, broader **human-labelled** calibration set before using visual signals to guide review decisions. The first 16-label descriptive pass is complete.
+2. Complete a local preparation record for a human-approved candidate only after the human supplies a factual description and commercial/editorial choice. `IMG_0364` has an external preview but no formal candidate state or rights conclusion.
 3. Keep its people, logo/trademark, third-party-content, and release-evidence items as human review prompts—never legal conclusions.
 4. Validate a darktable, RawTherapee, or GIMP handoff only using a separate working copy; never modify an original.
 

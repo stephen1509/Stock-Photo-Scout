@@ -56,9 +56,15 @@ Validated:
 - a five-image, alphabetically distributed calibration sample from the same approved folder produced distinct luminance, clipping, sharpness-proxy, and noise-proxy measurements;
 - all five sources still match their catalogue size and modification-time facts, and each external preview is byte-identical to its source.
 
-Still required:
+ Still required:
 - build a deliberately selected, broader **human-labelled** set before using measurements to guide review decisions;
 - only then consider additional signals such as horizon/composition/dust.
+
+First human-labelled pass completed (2026-09-03):
+- 16 explicitly labelled images were decoded read-only and their derived measurements plus labels were stored only in Git-ignored `local_analysis/`;
+- source size and modification time remained unchanged for all 16 images;
+- a local `calibration-report` command now creates descriptive group summaries only. It does not train a model or decide suitability, rights, or marketplace acceptance.
+- the set is sufficient for an initial signal-alignment check, not for automatic decisions or a claim that 0.05B is calibrated.
 
 ## 0.05C — Metadata and editor handoff
 
@@ -111,4 +117,4 @@ Result:
 
 ## Current genuine blocker
 
-The first local real-image validation is complete. The next blocked step is a read-only inspection of the current logged-in Dreamstime contributor UI; no connected browser is available in this session. Account access, upload, and submission remain unperformed.
+The current logged-in Dreamstime contributor upload workflow has been inspected read-only. The next meaningful gate is a dry run for a human-approved candidate with factual English metadata and a manual commercial/editorial/property-rights decision. Account uploads and submissions remain unperformed.

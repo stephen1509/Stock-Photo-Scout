@@ -29,7 +29,7 @@ Offline-safe development has advanced through the local foundations of phases 0.
 Candidate states, consented external previews, gallery/dashboard, preview integrity verification, and path/source-write safeguards.
 
 ### 0.05B core
-Decoder-independent luminance, clipping, sharpness-proxy, and noise-proxy measurements using caller-configured thresholds only. The consent-gated decoder orchestration, external analysis-record persistence, same-candidate analysis→preflight handoff, and an optional bounded Pillow-compatible adapter are also implemented. Pillow is not installed or authorized as a required dependency yet.
+Decoder-independent luminance, clipping, sharpness-proxy, and noise-proxy measurements using caller-configured thresholds only. The consent-gated decoder orchestration, external analysis-record persistence, same-candidate analysis→preflight handoff, and an optional bounded Pillow-compatible adapter are also implemented. A 16-image human-labelled local pass has a descriptive `calibration-report` command; it never trains a model or decides suitability. Pillow is not installed or authorized as a required dependency yet.
 
 ### 0.05C foundation
 Human metadata, commercial/editorial route, editor target, working-export tracking, local persistence, CLI and dashboard preparation workflow.
@@ -39,10 +39,10 @@ Manual preflight packet combining local preparation completeness, candidate stat
 
 ## Verification
 
-Final offline state: **77/77 tests passed** on Python 3.12. Temporary verification workflows were removed after completion.
+Final offline state: **79/79 tests passed** on Python 3.12. Temporary verification workflows were removed after completion.
 
 ## Current stop condition
 
-0.05A is locally validated, and 0.05B has completed a five-image decoder sample with source integrity confirmed. Do not claim 0.05B is calibrated until measurements are compared against a deliberately selected broader **human-labelled** set. The current logged-in Dreamstime contributor UI also remains to be inspected read-only when a connected browser is available.
+0.05A is locally validated, and 0.05B has completed a 16-image human-labelled descriptive pass with source integrity confirmed. Do not claim 0.05B is calibrated until a broader, deliberately selected human-labelled set supports reliable review guidance. The logged-in Dreamstime contributor UI was inspected read-only; uploads and submissions remain unperformed.
 
 0.05E remains outside current authorization.
