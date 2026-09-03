@@ -10,7 +10,7 @@ Current Dreamstime contributor workflow and the Windows tool ecosystem were rese
 
 ## 0.05A — Local candidate workspace
 
-Offline implementation is complete.
+Offline implementation and the first approved real-image validation are complete.
 
 Implemented:
 - human-controlled states: `skip`, `maybe`, `shortlist`, `edit`, `metadata-ready`, `submission-ready`;
@@ -23,10 +23,11 @@ Implemented:
 - cross-platform path validation, traversal rejection, symlink protection, and source-tree write refusal;
 - no-install CLI and browser controls.
 
-Still required before formally closing 0.05A:
-1. a small explicitly selected real-photo-folder trial on the Windows PC;
-2. post-trial verification that originals remain unchanged;
-3. decide from the real trial whether full-size byte-for-byte preview copies are sufficient or resized thumbnails are worth introducing.
+Validated on the previously approved `IMG_0530.jpg` source, without storing its path in project records:
+- a preview was written only to the Git-ignored `local_previews/` workspace;
+- source and preview SHA-256 values match;
+- source size and modification time remained unchanged;
+- the full-size preview is sufficient for the current single-candidate workflow. Resized thumbnails remain a later usability optimisation, not a requirement to proceed.
 
 ## 0.05B — Local technical/visual suggestions
 
@@ -48,10 +49,15 @@ Additional offline work completed:
 - saved analysis feeds CLI/dashboard preflight only when candidate paths match;
 - an optional bounded Pillow-compatible adapter is implemented and tested against a synthetic backend, but Pillow is not installed or declared required.
 
+Validated:
+- the existing local Pillow-compatible decoder decoded the approved image into a bounded 1600 × 1195 luminance grid;
+- its analysis record was saved outside the source tree in the Git-ignored `local_analysis/` workspace;
+- source integrity was confirmed after decoding.
+- a five-image, alphabetically distributed calibration sample from the same approved folder produced distinct luminance, clipping, sharpness-proxy, and noise-proxy measurements;
+- all five sources still match their catalogue size and modification-time facts, and each external preview is byte-identical to its source.
+
 Still required:
-- select/approve and install a real local image-decoding dependency on the Windows PC;
-- decode actual user-selected images;
-- calibrate measurements on real photographs;
+- build a deliberately selected, broader **human-labelled** set before using measurements to guide review decisions;
 - only then consider additional signals such as horizon/composition/dust.
 
 ## 0.05C — Metadata and editor handoff
@@ -105,4 +111,4 @@ Result:
 
 ## Current genuine blocker
 
-Further meaningful visual-development validation now requires the Windows PC and an explicitly selected real photo folder. Until then, no source photographs need to be read or modified.
+The first local real-image validation is complete. The next blocked step is a read-only inspection of the current logged-in Dreamstime contributor UI; no connected browser is available in this session. Account access, upload, and submission remain unperformed.

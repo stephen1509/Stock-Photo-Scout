@@ -1,84 +1,40 @@
-# Next ChatGPT Action — Research, Plan, Then Build
-
-## User-directed objective
-
-In the next ChatGPT session, thoroughly and carefully research the current Dreamstime contributor system and the practical tool ecosystem for a Windows photographer. Use the findings to make a concrete product plan for Stock Photo Scout, then begin implementation only after the user has reviewed and authorized that plan.
-
-The intended product is a local-first assistant that helps a photographer select images, prepare titles and keywords, identify possible improvements, coordinate with editors, and prepare for Dreamstime submission. It should assist the photographer; it must not silently alter originals, make legal determinations, or submit anything without approval.
+# Next ChatGPT Action — Resume Stock Photo Scout
 
 ## Start here
 
-Read these files first, in order:
+Read, in order:
 
 1. `PROJECT_AUTHORITY_CURRENT.md`
 2. `CURRENT_STATUS.md`
-3. This file
-4. `DREAMSTIME_RULES.md`, `PRODUCT_REQUIREMENTS.md`, `ARCHITECTURE.md`, and `ROADMAP.md`
+3. `APP_OPERATING_PLAN.md`
+4. `RESEARCH_BRIEF_2026-09-01.md`
+5. `ROADMAP.md`
 
-Current working state:
+## Completed state
 
-- Dropbox is the working source of truth: `/Projects/Stock Photo Scout`.
-- GitHub is checkpoint-only: `https://github.com/stephen1509/Stock-Photo-Scout`.
-- The current local dashboard runs at `http://127.0.0.1:8765/` when started from the project folder. It manages only local draft JSON and does not open source photos.
-- Local catalogs, local drafts, confirmed spellings, images, and previews are Git-ignored. Do not upload or commit them.
+- Research and operating plan are complete.
+- Offline foundations 0.05A–0.05D are implemented and tested.
+- The approved Japan photo folder was used for a read-only validation.
+- One candidate received an external byte-identical preview and bounded local analysis; a five-image sample confirmed the analysis pipeline works and left sources unchanged.
+- Local drafts, previews, catalogues, preparation records, and analysis records remain Dropbox-local/Git-ignored.
+- No photo was uploaded, no Dreamstime account state was changed, and no submission was made.
 
-## Research required
+## First next action
 
-Use current, authoritative sources wherever possible. Record direct links, the access date, and the practical meaning of each finding. Do not rely on remembered marketplace rules.
+Attempt a **read-only inspection of the current logged-in Dreamstime contributor interface** when a connected browser is available. Do not upload, submit, alter account settings, or reveal credentials. Confirm the current upload route, required fields, commercial/editorial choices, release workflow, and any available first-party keywording tools against the public research brief.
 
-### 1. Dreamstime contributor workflow
+If no connected browser is available, record that limitation and continue with local-only work.
 
-Research and distinguish confirmed facts from inference:
+## Local work that can continue safely
 
-- Contributor onboarding, current upload routes, and any official APIs, metadata/import tools, or browser tools available to contributors.
-- Technical file requirements, image-type distinctions, review/rejection criteria, and any current policies relevant to commercial versus editorial material.
-- Title, description, keyword, category, model/property release, trademark, and recognizable-person workflows.
-- Whether any automated keywording, enhancement, upload, or batch tools are officially available or permitted.
-- Current terms or restrictions relevant to third-party automation and assisted submission.
+1. Build a deliberately selected, broader **human-labelled** calibration set before using visual signals to guide review decisions.
+2. Complete the local preparation record for `IMG_0530` only after the human supplies a factual description and commercial/editorial choice.
+3. Keep its people, logo/trademark, third-party-content, and release-evidence items as human review prompts—never legal conclusions.
+4. Validate a darktable, RawTherapee, or GIMP handoff only using a separate working copy; never modify an original.
 
-Prefer Dreamstime’s own contributor documentation, terms, support pages, and contributor portal documentation. If a portal requires login, do not sign in or change any account state unless separately asked.
+## Non-negotiable boundaries
 
-### 2. Tool ecosystem for the photographer
-
-Research realistic Windows-compatible options, with free/open-source and reasonably priced choices clearly separated:
-
-- Local and cloud-assisted image classification, caption/title generation, keyword generation, and metadata tools.
-- Technical/visual review tools for crop suggestions, colour balance, white balance, exposure, horizon, sharpness, noise, dust spots, and composition.
-- Non-destructive image editors and their automation/integration options, including GIMP and likely alternatives such as darktable or RawTherapee. Confirm the user’s other editor rather than assuming it.
-- Digital asset management, tagging, metadata sidecar, and batch-preparation tools.
-- Submission/upload-assistance tools that are compatible with Dreamstime’s current rules.
-
-For each promising option, capture: purpose, Windows support, local/cloud data path, price/licensing, privacy implications, integration method, reliability/maturity, and any relevant Dreamstime-policy risk.
-
-## Required deliverables before implementation
-
-Create a research brief in the Dropbox project that includes:
-
-1. Source-backed Dreamstime workflow summary.
-2. Comparison table of candidate tools.
-3. A recommended stack with alternatives and costs.
-4. A privacy/data-flow diagram or concise equivalent: which steps stay local, which would send a selected image or metadata to a service, and what explicit consent each requires.
-5. A phased build plan for Stock Photo Scout:
-   - local candidate workspace and read-only preview;
-   - local technical/visual recommendations;
-   - optional title/keyword suggestion capability;
-   - editor handoff and non-destructive improvement workflow;
-   - Dreamstime preflight and submission preparation;
-   - any later authorized upload integration.
-6. A short list of decisions that require the user’s approval before implementation.
-
-Present the recommendation to the user before installing software, creating accounts, using paid APIs, uploading any photo, connecting Dreamstime, using account credentials, editing photos, or automating submissions.
-
-## Safety and consent gates
-
-- Original photographs are immutable: never rename, move, edit, upload, delete, or overwrite them.
-- Do not scan personal photo folders beyond a user-named folder or photo without permission.
-- Treat automated titles, keywords, classifications, quality scores, edit recommendations, and rights signals as suggestions for human review—not facts or legal advice.
-- Image analysis reads pixels; get permission before analyzing images beyond the explicitly selected set.
-- Cloud/AI analysis, paid tools, browser account access, installations, marketplace actions, and uploads each need separate, explicit approval at the relevant time.
-- If actual edits are eventually supported, use separate working copies or reversible editor sidecars; never apply them to originals.
-- Do not make a GitHub checkpoint containing private drafts, catalogs, previews, originals, credentials, or private research exports unless they are explicitly reviewed and safe to commit.
-
-## Definition of success for the research session
-
-The user can see a well-sourced, cost-aware plan that answers: what Dreamstime allows today; which tools are worth using; what stays private/local; what must be approved; and exactly what Stock Photo Scout should build first.
+- Original photographs are read-only: never rename, move, edit, overwrite, delete, embed metadata into, or upload them.
+- Keep all derived previews, analysis, drafts, catalogues, preparation records, and working copies outside source-photo folders and out of Git.
+- Cloud/AI services, paid APIs, Dreamstime account access beyond read-only inspection, uploads, submissions, and automation require a separate explicit approval.
+- Local preflight completeness is not legal clearance, Dreamstime eligibility, or acceptance.

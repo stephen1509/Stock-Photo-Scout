@@ -1,6 +1,6 @@
 # Stock Photo Scout — Current Authority
 
-Status: Offline 0.05A–0.05D foundation implemented; real-photo validation pending (2026-09-01)
+Status: Offline 0.05A–0.05D foundation implemented; first approved real-photo validation complete (2026-09-03)
 
 ## Purpose
 
@@ -10,7 +10,7 @@ Stock Photo Scout is a local Windows assistant for reviewing an existing photo c
 
 The Dreamstime/tool research is complete. `RESEARCH_BRIEF_2026-09-01.md` and `APP_OPERATING_PLAN.md` remain the research and operating authorities.
 
-Offline-safe development has advanced through the local foundations of phases 0.05A–0.05D. The next meaningful engineering gate requires real image decoding and a small explicitly selected Windows photo-folder trial.
+Offline-safe development has advanced through the local foundations of phases 0.05A–0.05D. The first explicitly approved image trial completed with an external preview and bounded local decoding; original-file integrity was confirmed afterward.
 
 ## Non-negotiable rules
 
@@ -43,6 +43,6 @@ Final offline state: **77/77 tests passed** on Python 3.12. Temporary verificati
 
 ## Current stop condition
 
-Do not claim 0.05A fully closed or 0.05B calibrated until a real Windows photo-folder trial is run with explicit user-selected photos and original-file integrity is confirmed afterward.
+0.05A is locally validated, and 0.05B has completed a five-image decoder sample with source integrity confirmed. Do not claim 0.05B is calibrated until measurements are compared against a deliberately selected broader **human-labelled** set. The current logged-in Dreamstime contributor UI also remains to be inspected read-only when a connected browser is available.
 
 0.05E remains outside current authorization.
