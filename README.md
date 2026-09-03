@@ -61,6 +61,12 @@ Create preparation:
 python stock_photo_scout.py create-preparation "D:\Photos" IMG_0600.jpg local_preparation\img_0600.json --title "Temple at dawn" --description "Historic temple exterior at dawn" --keyword temple --keyword dawn --route editorial
 ```
 
+For the current Dreamstime category structure, record up to three human-reviewed pairs:
+
+```powershell
+python stock_photo_scout.py edit-preparation "D:\Photos" local_preparation\img_0600.json --category-pair "Arts & Architecture :: Historic buildings" --category-pair "Travel :: Landmarks"
+```
+
 Review:
 
 ```powershell

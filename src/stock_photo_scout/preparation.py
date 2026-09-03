@@ -18,6 +18,20 @@ _EDITORS = frozenset({"none", "darktable", "rawtherapee", "gimp", "other"})
 
 
 @dataclass(frozen=True)
+class CategoryPair:
+    """One human-selected marketplace category and optional subcategory."""
+
+    category: str
+    subcategory: str = ""
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.category, str) or not self.category.strip():
+            raise ValueError("Category pair requires a category.")
+        if not isinstance(self.subcategory, str):
+            raise TypeError("Category-pair subcategory must be text.")
+
+
+@dataclass(frozen=True)
 class PreparationRecord:
     """Local human-authored preparation state for one candidate."""
 
@@ -26,6 +40,7 @@ class PreparationRecord:
     description: str = ""
     keywords: tuple[str, ...] = ()
     categories: tuple[str, ...] = ()
+    category_pairs: tuple[CategoryPair, ...] = ()
     route: SubmissionRoute = "undecided"
     editor_target: EditorTarget = "none"
     working_export_relative_path: str = ""
@@ -45,6 +60,10 @@ class PreparationRecord:
         for values, label in ((self.keywords, "keywords"), (self.categories, "categories")):
             if any(not isinstance(value, str) for value in values):
                 raise TypeError(f"{label} must contain text values.")
+        if len(self.category_pairs) > 3:
+            raise ValueError("Dreamstime preparation supports at most three category pairs.")
+        if any(not isinstance(value, CategoryPair) for value in self.category_pairs):
+            raise TypeError("category_pairs must contain CategoryPair values.")
 
 
 @dataclass(frozen=True)
@@ -108,19 +127,40 @@ def preparation_from_json(serialized: str) -> PreparationRecord:
     item = payload["preparation"]
     keywords = item.get("keywords", [])
     categories = item.get("categories", [])
-    if not isinstance(keywords, list) or not isinstance(categories, list):
+    category_pairs = item.get("category_pairs", [])
+    if not isinstance(keywords, list) or not isinstance(categories, list) or not isinstance(category_pairs, list):
         raise ValueError("Preparation keywords and categories must be lists.")
+    try:
+        parsed_pairs = tuple(
+            CategoryPair(category=pair["category"], subcategory=pair.get("subcategory", ""))
+            for pair in category_pairs
+            if isinstance(pair, dict)
+        )
+    except (KeyError, TypeError, ValueError) as error:
+        raise ValueError("Preparation category pairs must contain category and optional subcategory text.") from error
+    if len(parsed_pairs) != len(category_pairs):
+        raise ValueError("Preparation category pairs must be objects.")
     return PreparationRecord(
         relative_path=item.get("relative_path", ""),
         title=item.get("title", ""),
         description=item.get("description", ""),
         keywords=tuple(keywords),
         categories=tuple(categories),
+        category_pairs=parsed_pairs,
         route=item.get("route", "undecided"),
         editor_target=item.get("editor_target", "none"),
         working_export_relative_path=item.get("working_export_relative_path", ""),
         notes=item.get("notes", ""),
     )
+
+
+def category_pair_from_text(value: str) -> CategoryPair:
+    """Parse one CLI pair as `Category :: Subcategory` without marketplace lookup."""
+
+    category, separator, subcategory = value.partition("::")
+    if not category.strip():
+        raise ValueError("Category pair must start with a category before '::'.")
+    return CategoryPair(category.strip(), subcategory.strip() if separator else "")
 
 
 def save_preparation_json(

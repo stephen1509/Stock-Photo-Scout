@@ -104,6 +104,10 @@ def preflight_to_text(packet: PreflightPacket) -> str:
         f"Description: {packet.preparation.description}",
         f"Keywords: {', '.join(packet.preparation.keywords)}",
         f"Categories: {', '.join(packet.preparation.categories)}",
+        "Dreamstime category pairs: " + ", ".join(
+            pair.category + (f" :: {pair.subcategory}" if pair.subcategory else "")
+            for pair in packet.preparation.category_pairs
+        ),
         f"Route: {packet.preparation.route}",
         f"Editor: {packet.preparation.editor_target}",
         f"Working export: {packet.preparation.working_export_relative_path}",

@@ -18,6 +18,7 @@ from .drafts import (
 from .candidate_dashboard import CandidateDashboardSettings, serve_candidate_dashboard
 from .preparation import (
     PreparationRecord,
+    category_pair_from_text,
     edit_preparation,
     evaluate_preparation,
     preparation_from_json,
@@ -214,6 +215,10 @@ def _add_preparation_fields(command: argparse.ArgumentParser) -> None:
     command.add_argument("--description")
     command.add_argument("--keyword", action="append")
     command.add_argument("--category", action="append")
+    command.add_argument(
+        "--category-pair", action="append",
+        help="Repeatable Dreamstime category pair as 'Category :: Subcategory' (maximum three).",
+    )
     command.add_argument("--route", choices=("undecided", "commercial", "editorial"))
     command.add_argument("--editor-target", choices=("none", "darktable", "rawtherapee", "gimp", "other"))
     command.add_argument("--working-export-relative-path")
@@ -237,6 +242,8 @@ def _apply_preparation_fields(record: PreparationRecord, parsed: argparse.Namesp
         changes["keywords"] = tuple(parsed.keyword)
     if getattr(parsed, "category", None) is not None:
         changes["categories"] = tuple(parsed.category)
+    if getattr(parsed, "category_pair", None) is not None:
+        changes["category_pairs"] = tuple(category_pair_from_text(value) for value in parsed.category_pair)
     return edit_preparation(record, **changes)
 
 

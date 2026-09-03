@@ -8,7 +8,9 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from stock_photo_scout.preparation import (
+    CategoryPair,
     PreparationRecord,
+    category_pair_from_text,
     edit_preparation,
     evaluate_preparation,
     preparation_from_json,
@@ -81,6 +83,20 @@ class PreparationTests(unittest.TestCase):
             route="editorial",
         )
         self.assertIn("duplicate_keywords", {prompt.code for prompt in evaluate_preparation(record).prompts})
+
+    def test_round_trips_up_to_three_category_pairs(self) -> None:
+        record = PreparationRecord(
+            "photo.jpg",
+            category_pairs=(
+                CategoryPair("Arts & Architecture", "Historic buildings"),
+                CategoryPair("Travel", "Landmarks"),
+                CategoryPair("Nature"),
+            ),
+        )
+        self.assertEqual(preparation_from_json(preparation_to_json(record)), record)
+        self.assertEqual(category_pair_from_text("Travel :: Landmarks"), CategoryPair("Travel", "Landmarks"))
+        with self.assertRaises(ValueError):
+            PreparationRecord("photo.jpg", category_pairs=(CategoryPair("A"),) * 4)
 
 
 if __name__ == "__main__":
