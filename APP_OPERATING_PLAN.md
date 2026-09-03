@@ -109,6 +109,19 @@ For each selected final export, Stock Photo Scout creates a local, readable pack
 
 The packet may say **“ready for your manual review”**. It must never say **“Dreamstime-compliant”** or **“will be accepted.”**
 
+### Verified portal field map — test observation (2026-09-03)
+
+During a separately authorized test upload of a non-original working copy, Dreamstime placed the file in an unfinished upload area before any submission. Its edit-information page exposed:
+
+- commercial or editorial licence choice;
+- model-release and property-release attachment controls;
+- required English title, description, and keywords;
+- up to three category/subcategory pairs;
+- optional portal Autofill and visible AI-generated category/keyword suggestions;
+- a distinct **Submit commercial** action.
+
+The test did not save metadata or use the submit action. Treat portal suggestions as optional prompts requiring human review; do not activate Autofill, save portal edits, delete an unfinished file, or submit without a separately explicit user instruction at that time.
+
 ### G. Manual upload and learning loop
 
 1. Stephen selects the final export and uploads it through Dreamstime’s current browser/FTP route.

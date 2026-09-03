@@ -43,6 +43,6 @@ Final offline state: **79/79 tests passed** on Python 3.12. Temporary verificati
 
 ## Current stop condition
 
-0.05A is locally validated, and 0.05B has completed a 16-image human-labelled descriptive pass with source integrity confirmed. Do not claim 0.05B is calibrated until a broader, deliberately selected human-labelled set supports reliable review guidance. The logged-in Dreamstime contributor UI was inspected read-only; uploads and submissions remain unperformed.
+0.05A is locally validated, and 0.05B has completed a 16-image human-labelled descriptive pass with source integrity confirmed. Do not claim 0.05B is calibrated until a broader, deliberately selected human-labelled set supports reliable review guidance. One separately authorized non-original test upload reached Dreamstime's unfinished edit-information screen; no portal metadata was saved and no image was submitted or published.
 
 0.05E remains outside current authorization.

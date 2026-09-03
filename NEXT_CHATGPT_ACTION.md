@@ -18,6 +18,7 @@ Read, in order:
 - Two candidates received external byte-identical previews and bounded local analysis; a 16-image human-labelled pass confirmed the analysis pipeline works and left sources unchanged.
 - Local drafts, previews, catalogues, preparation records, and analysis records remain Dropbox-local/Git-ignored.
 - No photo was uploaded, no Dreamstime account state was changed, and no submission was made.
+- One separately authorized non-original test working copy is present in Dreamstime's unfinished edit-information screen. Do not save portal metadata, delete it, or submit it unless the user gives a specific action-time instruction.
 
 ## First next action
 

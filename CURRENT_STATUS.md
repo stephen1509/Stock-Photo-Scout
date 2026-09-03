@@ -118,3 +118,5 @@ Result:
 ## Current genuine blocker
 
 The current logged-in Dreamstime contributor upload workflow has been inspected read-only. The next meaningful gate is a dry run for a human-approved candidate with factual English metadata and a manual commercial/editorial/property-rights decision. Account uploads and submissions remain unperformed.
+
+Update (2026-09-03): a separately authorized non-original working-copy test upload completed and reached the unfinished-file edit-information screen. No portal metadata was saved and no image was submitted, published, or finalized. The portal field map is recorded in `APP_OPERATING_PLAN.md`.

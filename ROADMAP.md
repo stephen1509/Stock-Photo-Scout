@@ -31,4 +31,4 @@ Local preflight packet and dashboard/CLI access are implemented. It never upload
 Cloud/AI services, paid APIs, account/browser integration or upload assistance require separate explicit approval.
 
 ## Current next gate
-A dry run for a human-approved candidate with factual English metadata and a manually reviewed commercial/editorial/property-rights route. A broader, deliberately selected human-labelled set remains required before visual-signal guidance can be trusted.
+Use the verified Dreamstime portal field map to align local metadata/release/category preparation; no portal metadata save or submission is authorized. A broader, deliberately selected human-labelled set remains required before visual-signal guidance can be trusted.
