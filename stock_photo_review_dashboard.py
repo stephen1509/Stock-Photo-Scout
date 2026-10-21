@@ -1,6 +1,10 @@
 """Launch the local Stock Photo Scout 0.07 human-review dashboard."""
 from pathlib import Path
 import argparse
+import sys
+
+PROJECT_ROOT=Path(__file__).resolve().parent
+sys.path.insert(0,str(PROJECT_ROOT/"src"))
 from stock_photo_scout.review_server import serve_review_dashboard
 
 def main():
