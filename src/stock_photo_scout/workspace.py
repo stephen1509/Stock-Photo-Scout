@@ -87,6 +87,13 @@ def set_candidate_state(records:dict[str,CandidateWorkspaceRecord],relative_path
     if state not in CANDIDATE_STATES: raise ValueError(f"Unsupported candidate state: {state}")
     if state=="submission-ready": raise ValueError("submission-ready cannot be set directly; use the consolidated 0.06 readiness workflow.")
     normalized=_validated_relative_path(relative_path).as_posix(); existing=records.get(normalized,CandidateWorkspaceRecord(normalized)); updated=CandidateWorkspaceRecord(normalized,state,existing.preview_relative_path if preview_relative_path is None else preview_relative_path); _validate_record(updated); result=dict(records); result[normalized]=updated; return result
+def set_candidate_preview(records:dict[str,CandidateWorkspaceRecord],relative_path:str,preview_relative_path:str)->dict[str,CandidateWorkspaceRecord]:
+    """Update preview metadata without treating it as a candidate-state transition.
+
+    This deliberately preserves a readable legacy submission-ready state. New
+    records default to maybe; this helper can never promote a candidate.
+    """
+    normalized=_validated_relative_path(relative_path).as_posix(); preview=_validated_relative_path(preview_relative_path).as_posix(); existing=records.get(normalized,CandidateWorkspaceRecord(normalized)); updated=CandidateWorkspaceRecord(normalized,existing.state,preview); _validate_record(updated); result=dict(records); result[normalized]=updated; return result
 def _validated_relative_path(relative_path:str)->Path:
     if not isinstance(relative_path,str) or not relative_path: raise ValueError("Candidate path must be a non-empty safe relative path.")
     candidate=Path(relative_path); windows=PureWindowsPath(relative_path)
