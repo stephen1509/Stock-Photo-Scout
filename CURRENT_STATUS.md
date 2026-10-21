@@ -1,122 +1,69 @@
 # Current Status
 
-## Checkpoints 0.01–0.04 — complete
+Date: 2026-10-21
+Development branch: `improve/reliability-qc-006-20261021`
 
-The read-only scanner, deterministic catalog/metadata foundation, exact-duplicate grouping, explainable technical prompts, local title/keyword/notes/rights drafts, spelling support, CLI workflows, and localhost draft dashboard are complete.
+## Qualified historical baseline
+Checkpoints 0.01–0.05 established the read-only scanner/catalog, duplicate grouping, local drafts, candidate workspace, bounded visual observations, preparation/editor handoff and manual marketplace preflight foundation.
 
-## Research and operating plan — complete (2026-09-01)
+The authoritative historical qualified baseline is **79/79 tests passed** on the older 0.05-era code. Older documentation that says 77/77 is superseded. This historical count MUST NOT be presented as verification of the expanded 0.06/0.07 branch.
 
-Current Dreamstime contributor workflow and the Windows tool ecosystem were researched and recorded in `RESEARCH_BRIEF_2026-09-01.md`. The approved phased operating/build plan is `APP_OPERATING_PLAN.md`.
+## 0.06 Reliability & QC — implemented, qualification pending
+Implemented on the development branch:
+- fail-closed preview/preflight integrity;
+- multidimensional candidate review foundation;
+- structured route-sensitive rights review;
+- source→export provenance with SHA-256 and stale-QC detection;
+- exact-export human final-QC record and 100% inspection planning;
+- consolidated fail-closed readiness gates;
+- strict persisted-analysis validation including finite numeric/range checks;
+- cross-platform traversal/drive/UNC/symlink protections;
+- safer atomic external persistence;
+- localhost Host/Origin/CSP and mutation-lock hardening;
+- direct `submission-ready` mutation prohibited;
+- legacy `submission-ready` remains readable but non-authoritative;
+- preview metadata now updates independently of state transitions, preserving legacy compatibility without promotion/demotion.
 
-## 0.05A — Local candidate workspace
+## 0.07 Review Intelligence — implementation in progress
+Implemented foundations:
+- human fast-screen states: unreviewed / skip / hold / inspect;
+- explicit human reason codes with no aggregate stock/acceptance score;
+- deterministic similar/burst hints from exact hash, capture-time proximity and weak filename-sequence proximity;
+- explicit human preferred-member decision for grouped candidates;
+- human-specified subject region → safe actual-pixel inspection-region planning;
+- structured composition/usefulness review: subject clarity, background clutter, copy space, crop flexibility, redundancy and alternate-orientation review;
+- fail-closed Stage-1 → Stage-2 workflow assessment;
+- deterministic external review/usefulness persistence with source-tree write refusal and atomic overwrite;
+- ReviewService composing persisted review state and workflow assessment;
+- validated localhost-dashboard payload adapter;
+- authoritative shortlist gate: the legacy workspace `shortlist` label alone is not proof of completed 0.07 review;
+- standalone 0.07 localhost review controller/page and regression tests authored.
 
-Offline implementation and the first approved real-image validation are complete.
+Still to integrate:
+- mount the 0.07 review page/API routes into the main candidate dashboard;
+- add candidate-card navigation/status for review qualification;
+- ensure UI shortlist actions use the authoritative 0.07 gate rather than implying qualification from the legacy workspace label;
+- connect completed 0.07 review into consolidated readiness without weakening provenance, rights, exact-export QC or current-marketplace-requirements gates.
 
-Implemented:
-- human-controlled states: `skip`, `maybe`, `shortlist`, `edit`, `metadata-ready`, `submission-ready`;
-- deterministic local workspace JSON outside source folders;
-- explicit consent before source image-byte reads;
-- non-overwriting JPEG/PNG/TIFF preview copies outside the source tree;
-- candidate gallery layered over the localhost dashboard;
-- original images are never served directly;
-- explicit preview integrity/staleness verification with SHA-256;
-- cross-platform path validation, traversal rejection, symlink protection, and source-tree write refusal;
-- no-install CLI and browser controls.
+## Preparation / metadata hardening still required
+Existing preparation already supports factual title/description/keywords, duplicate-keyword prompting, commercial/editorial route, editor handoff, safe relative export paths and Dreamstime category pairs. Remaining work includes stricter persisted-schema validation, blank/duplicate normalization policy, durable fsync on preparation writes, and clearer marketplace-neutral core vs marketplace-adapter constraints.
 
-Validated on the previously approved `IMG_0530.jpg` source, without storing its path in project records:
-- a preview was written only to the Git-ignored `local_previews/` workspace;
-- source and preview SHA-256 values match;
-- source size and modification time remained unchanged;
-- the full-size preview is sufficient for the current single-candidate workflow. Resized thumbnails remain a later usability optimisation, not a requirement to proceed.
+## Qualification truth
+The expanded 0.06/0.07 test suite has **NOT** been executed in a confirmed full local run in the current environment. A previous attempt to obtain an executable checkout failed because GitHub DNS resolution was unavailable. GitHub Actions are intentionally not being consumed as a routine substitute because remote resources are scarce.
 
-## 0.05B — Local technical/visual suggestions
+Therefore:
+- do not claim a new passing-test count;
+- do not merge to `main` solely from static inspection;
+- when an executable checkout becomes available, run the complete suite and synthetic destructive qualification, repair in batches, then rerun.
 
-Offline core implemented.
+## Product/account boundary
+Original photographs remain read-only. Pixel/byte reads require the established explicit-consent pathways. No cloud CV/generative AI is required. No marketplace upload, submission, publication or deletion is authorized by this development work. The previously authorized non-original Dreamstime working-copy test remains unfinished and must not be continued without explicit action-time instruction.
 
-Implemented:
-- a pure luminance-grid analysis engine independent of any decoder;
-- mean luminance;
-- dark/bright clipping ratios;
-- explainable sharpness proxy;
-- explainable noise proxy;
-- optional caller-configured thresholds only;
-- no Dreamstime acceptance thresholds or hidden quality score;
-- synthetic tests.
-
-Additional offline work completed:
-- consent-gated decoder orchestration is implemented;
-- analysis JSON persistence/loading is external and Git-ignored;
-- saved analysis feeds CLI/dashboard preflight only when candidate paths match;
-- an optional bounded Pillow-compatible adapter is implemented and tested against a synthetic backend, but Pillow is not installed or declared required.
-
-Validated:
-- the existing local Pillow-compatible decoder decoded the approved image into a bounded 1600 × 1195 luminance grid;
-- its analysis record was saved outside the source tree in the Git-ignored `local_analysis/` workspace;
-- source integrity was confirmed after decoding.
-- a five-image, alphabetically distributed calibration sample from the same approved folder produced distinct luminance, clipping, sharpness-proxy, and noise-proxy measurements;
-- all five sources still match their catalogue size and modification-time facts, and each external preview is byte-identical to its source.
-
- Still required:
-- build a deliberately selected, broader **human-labelled** set before using measurements to guide review decisions;
-- only then consider additional signals such as horizon/composition/dust.
-
-First human-labelled pass completed (2026-09-03):
-- 16 explicitly labelled images were decoded read-only and their derived measurements plus labels were stored only in Git-ignored `local_analysis/`;
-- source size and modification time remained unchanged for all 16 images;
-- a local `calibration-report` command now creates descriptive group summaries only. It does not train a model or decide suitability, rights, or marketplace acceptance.
-- the set is sufficient for an initial signal-alignment check, not for automatic decisions or a claim that 0.05B is calibrated.
-
-## 0.05C — Metadata and editor handoff
-
-Offline foundation implemented.
-
-Implemented:
-- human-approved title, description, keywords, categories;
-- commercial/editorial human choice;
-- editor target: none/darktable/RawTherapee/GIMP/other;
-- working-export relative path;
-- notes;
-- deterministic external JSON persistence;
-- CLI create/edit/review commands;
-- localhost Preparation page per candidate.
-
-No editor is launched automatically and no original is modified.
-
-## 0.05D — Manual Dreamstime preflight
-
-Offline foundation implemented.
-
-Implemented:
-- local manual preflight packet;
-- preparation-field completeness prompts;
-- candidate-state check;
-- unresolved people/property/logo/release prompt support;
-- preview-integrity input;
-- current-Dreamstime-requirements-reviewed gate;
-- technical-observation collection;
-- human-readable packet and deterministic JSON;
-- CLI and localhost dashboard access.
-
-`local_packet_complete` means only that this local checklist has no recorded blockers. It does not mean legal clearance, Dreamstime eligibility, acceptance, or upload success.
-
-## 0.05E — Optional integrations
-
-Not started. Cloud/AI services, paid APIs, account access, upload assistance, or automation remain outside current authorization and require a separate explicit decision.
-
-## Verification
-
-The final offline development state was verified on Python 3.12 with:
-
-`python -m unittest discover -s tests -v`
-
-Result:
-- **77 tests run**
-- **77 passed**
-- **0 failures / 0 errors**
-- temporary GitHub Actions verification workflows were removed after use.
-
-## Current genuine blocker
-
-The current logged-in Dreamstime contributor upload workflow has been inspected read-only. The next meaningful gate is a dry run for a human-approved candidate with factual English metadata and a manual commercial/editorial/property-rights decision. Account uploads and submissions remain unperformed.
-
-Update (2026-09-03): a separately authorized non-original working-copy test upload completed and reached the unfinished-file edit-information screen. No portal metadata was saved and no image was submitted, published, or finalized. The portal field map is recorded in `APP_OPERATING_PLAN.md`.
+## Next development order
+1. Integrate the 0.07 review controller/page into the localhost candidate dashboard.
+2. Reconcile shortlist UI/state with authoritative 0.07 qualification.
+3. Harden preparation persistence/metadata semantics.
+4. Bind 0.07 review completion into consolidated readiness.
+5. Execute full local qualification when a checkout becomes available.
+6. Perform a small explicitly selected real-photo end-to-end dry run after qualification.
+7. Continue into 0.08 Stock Intelligence and marketplace-neutral adapters.
