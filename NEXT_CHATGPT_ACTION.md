@@ -1,39 +1,41 @@
 # Next ChatGPT Action — Resume Stock Photo Scout
 
 ## Start here
-
 Read, in order:
-
 1. `PROJECT_AUTHORITY_CURRENT.md`
 2. `CURRENT_STATUS.md`
 3. `APP_OPERATING_PLAN.md`
-4. `RESEARCH_BRIEF_2026-09-01.md`
+4. `REVIEW_INTELLIGENCE_0.07_PLAN.md`
 5. `ROADMAP.md`
 
-## Completed state
+## Current durable development state
+Development branch: `improve/reliability-qc-006-20261021`.
 
-- Research and operating plan are complete.
-- Offline foundations 0.05A–0.05D are implemented and tested.
-- The approved Japan photo folder was used for a read-only validation.
-- Two candidates received external byte-identical previews and bounded local analysis; a 16-image human-labelled pass confirmed the analysis pipeline works and left sources unchanged.
-- Local drafts, previews, catalogues, preparation records, and analysis records remain Dropbox-local/Git-ignored.
-- No photo was uploaded, no Dreamstime account state was changed, and no submission was made.
-- One separately authorized non-original test working copy is present in Dreamstime's unfinished edit-information screen. Do not save portal metadata, delete it, or submit it unless the user gives a specific action-time instruction.
+0.06 Reliability/QC is implemented but awaits a confirmed full executable qualification run. 0.07 Review Intelligence is substantially implemented: human fast screen, Stage-2 review, similar-group preference, composition/usefulness, main-dashboard review integration, authoritative shortlist gating, complete review UI fields, and combined atomic review-packet persistence with legacy split-file fallback. 0.08 has marketplace-rule provenance, a neutral adapter gate, portfolio observations, a human-controlled marketplace outcome ledger, and explainable outcome summaries.
+
+The historical **79/79** result belongs only to the older qualified baseline. Do not report it as verification of the expanded branch and do not invent a new passing-test count.
 
 ## First next action
+Obtain a usable local checkout when possible and run:
+`python -m unittest discover -s tests -v`
 
-Dry-run a human-approved candidate with factual English metadata and a manually reviewed commercial/editorial/property-rights route. The current Dreamstime contributor upload interface has been inspected read-only: it accepts JPEGs, then gathers metadata and offers model/property-release attachment where required. Do not upload, submit, alter account settings, or reveal credentials.
+Then repair failures in batches and rerun. Do not consume GitHub Actions merely as a routine substitute for the missing local run.
 
-## Local work that can continue safely
+After unit qualification, perform synthetic destructive qualification covering source immutability, external-only writes, partial-write cleanup, symlink/traversal/Windows path rejection, review-packet corruption/path mismatch, stale provenance, changed export invalidating QC, localhost dashboard safety, concurrent mutations, legacy ready records, and attempts to bypass authoritative shortlist/readiness gates.
 
-1. Build a deliberately selected, broader **human-labelled** calibration set before using visual signals to guide review decisions. The first 16-label descriptive pass is complete.
-2. Complete a local preparation record for a human-approved candidate only after the human supplies a factual description and commercial/editorial choice. `IMG_0364` has an external preview but no formal candidate state or rights conclusion.
-3. Keep its people, logo/trademark, third-party-content, and release-evidence items as human review prompts—never legal conclusions.
-4. Validate a darktable, RawTherapee, or GIMP handoff only using a separate working copy; never modify an original.
+## Safe implementation that can continue before executable qualification
+1. Audit combined review-packet migration/failure semantics and remaining concurrency edges.
+2. Continue marketplace-neutral 0.08 metadata/outcome analysis without embedding unverified marketplace requirements or acceptance predictions.
+3. Keep Dreamstime-specific category behavior behind or moving toward the marketplace-adapter boundary.
+4. Update status/test documentation as implementation changes, but never claim tests passed without execution.
+
+## First real-photo product qualification — only after code qualification
+Use a small set of photographs explicitly selected by the user. Pixel/byte reads still require the established explicit-consent pathway. Run the complete local chain: candidate → human 0.07 review → qualified shortlist → factual preparation/route/rights review → separate working export → provenance → exact-export 100% QC → current sourced marketplace rules → local human preflight. Do not submit anything.
 
 ## Non-negotiable boundaries
-
 - Original photographs are read-only: never rename, move, edit, overwrite, delete, embed metadata into, or upload them.
-- Keep all derived previews, analysis, drafts, catalogues, preparation records, and working copies outside source-photo folders and out of Git.
-- Cloud/AI services, paid APIs, Dreamstime account access beyond read-only inspection, uploads, submissions, and automation require a separate explicit approval.
-- Local preflight completeness is not legal clearance, Dreamstime eligibility, or acceptance.
+- Keep derived previews, analysis, drafts, catalogues, review packets, preparation records and working copies outside source-photo folders and out of Git.
+- No Work mode, Netlify, routine GitHub Actions, Remote Desktop Commander, cloud CV/generative AI, paid APIs, or marketplace mutation is required for current development.
+- No marketplace upload, submission, publication, deletion, account-setting change or credential exposure without separate explicit action-time authorization.
+- The previously authorized non-original Dreamstime working-copy test remains unfinished; do not continue it without explicit instruction.
+- Local preflight completeness is not legal clearance, marketplace eligibility, acceptance probability, or sales prediction.
