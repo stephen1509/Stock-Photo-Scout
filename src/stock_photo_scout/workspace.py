@@ -7,6 +7,7 @@ from typing import Final
 WORKSPACE_SCHEMA_VERSION:Final[int]=1
 SUPPORTED_PREVIEW_SUFFIXES:Final[tuple[str,...]]=(".jpg",".jpeg",".png",".tif",".tiff")
 CANDIDATE_STATES:Final[tuple[str,...]]=("skip","maybe","shortlist","edit","metadata-ready","submission-ready")
+DIRECT_MUTABLE_STATES:Final[tuple[str,...]]=("skip","maybe","shortlist","edit","metadata-ready")
 @dataclass(frozen=True)
 class CandidateWorkspaceRecord:
     relative_path:str; state:str="maybe"; preview_relative_path:str=""
@@ -84,6 +85,7 @@ def save_workspace(records:dict[str,CandidateWorkspaceRecord],destination:str|Pa
     return target
 def set_candidate_state(records:dict[str,CandidateWorkspaceRecord],relative_path:str,state:str,*,preview_relative_path:str|None=None)->dict[str,CandidateWorkspaceRecord]:
     if state not in CANDIDATE_STATES: raise ValueError(f"Unsupported candidate state: {state}")
+    if state=="submission-ready": raise ValueError("submission-ready cannot be set directly; use the consolidated 0.06 readiness workflow.")
     normalized=_validated_relative_path(relative_path).as_posix(); existing=records.get(normalized,CandidateWorkspaceRecord(normalized)); updated=CandidateWorkspaceRecord(normalized,state,existing.preview_relative_path if preview_relative_path is None else preview_relative_path); _validate_record(updated); result=dict(records); result[normalized]=updated; return result
 def _validated_relative_path(relative_path:str)->Path:
     if not isinstance(relative_path,str) or not relative_path: raise ValueError("Candidate path must be a non-empty safe relative path.")
