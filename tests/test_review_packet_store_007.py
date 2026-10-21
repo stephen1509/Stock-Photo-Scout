@@ -8,8 +8,7 @@ from stock_photo_scout.review_service import ReviewService
 from stock_photo_scout.review_store import save_review
 from stock_photo_scout.usefulness_store import save_usefulness
 class ReviewPacketStore007Tests(unittest.TestCase):
- def records(self,rel="a.jpg"):
-  return ReviewIntelligenceRecord(rel,screen_decision="inspect",focus_state="looks-clean",composition_state="strong"),StockUsefulnessReview("clear","clean","right","strong","distinct",False,True,"Human reviewed")
+ def records(self,rel="a.jpg"):return ReviewIntelligenceRecord(rel,screen_decision="inspect",focus_state="looks-clean",composition_state="strong"),StockUsefulnessReview("clear","clean","right","strong","distinct",False,True,"Human reviewed")
  def test_packet_round_trip(self):
   r,u=self.records();self.assertEqual(packet_from_json(packet_to_json(r,u)),(r,u))
  def test_packet_cannot_be_inside_source_tree(self):
@@ -26,4 +25,19 @@ class ReviewPacketStore007Tests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as td:
    root=Path(td);source=root/"photos";source.mkdir();reviews=root/"reviews";s=ReviewService(source,reviews);packet,_,_=s._paths("a.jpg");r,u=self.records("b.jpg");save_packet(r,u,packet,source)
    with self.assertRaises(ValueError):s.load("a.jpg")
+ def test_symlink_destination_is_rejected(self):
+  with tempfile.TemporaryDirectory() as td:
+   root=Path(td);source=root/"photos";source.mkdir();outside=root/"outside.json";outside.write_text("keep");link=root/"packet.json"
+   try:link.symlink_to(outside)
+   except (OSError,NotImplementedError):self.skipTest("symlinks unavailable")
+   r,u=self.records()
+   with self.assertRaises(ValueError):save_packet(r,u,link,source,overwrite=True)
+   self.assertEqual(outside.read_text(),"keep")
+ def test_symlink_parent_is_rejected(self):
+  with tempfile.TemporaryDirectory() as td:
+   root=Path(td);source=root/"photos";source.mkdir();real=root/"real";real.mkdir();link=root/"linked"
+   try:link.symlink_to(real,target_is_directory=True)
+   except (OSError,NotImplementedError):self.skipTest("symlinks unavailable")
+   r,u=self.records()
+   with self.assertRaises(ValueError):save_packet(r,u,link/"packet.json",source)
 if __name__=="__main__":unittest.main()
