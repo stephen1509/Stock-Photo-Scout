@@ -49,16 +49,20 @@ Remaining UI consolidation:
 - prevent the legacy workspace `shortlist` label from visually implying completed 0.07 qualification.
 
 ## Preparation / metadata hardening
-Preparation now has strict supported-schema parsing, typed keyword/category/category-pair validation, safe cross-platform relative paths, external-only persistence, fsync-backed creation/atomic overwrite, duplicate-keyword prompts and blank keyword/category prompts. Dreamstime category pairs remain a marketplace-specific preparation detail and should migrate behind the future adapter boundary rather than spread into the neutral core.
+Preparation now has strict supported-schema parsing, typed keyword/category/category-pair validation, safe cross-platform relative paths, external-only persistence, fsync-backed creation/atomic overwrite, duplicate-keyword prompts and blank keyword/category prompts. Dreamstime category pairs remain a marketplace-specific preparation detail and should migrate behind the adapter boundary rather than spread into the neutral core.
 
-## 0.08 Stock Intelligence / marketplace engine — foundation started, qualification pending
-Implemented initial marketplace-neutral components:
+## 0.08 Stock Intelligence / marketplace engine — foundation expanding, qualification pending
+Implemented marketplace-neutral components:
 - `marketplace_rules.py`: requirement-profile provenance with marketplace name, authoritative HTTPS source, human verification date and explicit review horizon;
 - stale, missing, future-dated or malformed requirement profiles fail closed rather than silently becoming current marketplace truth;
+- `marketplace_adapter.py`: neutral candidate-facts adapter gate requiring a current rule profile, concrete route, factual metadata presence, rights review and exact-export QC before human marketplace preflight;
+- the adapter contract cannot itself upload/submit anything and does not infer marketplace acceptance probability;
 - no Dreamstime/Adobe/Shutterstock/Getty/Alamy requirements are invented or embedded by this framework;
 - `portfolio_intelligence.py`: explainable human-data observations for subject clusters, route/copy-space incompleteness and orientation concentration;
 - portfolio intelligence deliberately produces observations, not sales predictions, acceptance probabilities or hidden suitability scores;
-- tests authored for current/stale rule profiles and explainable portfolio observations.
+- `rejection_learning.py`: human-controlled factual marketplace outcome ledger with accepted/rejected/withdrawn/pending states, explicit reason codes, safe paths and external atomic persistence;
+- the outcome ledger does not train a model or automatically change thresholds; it creates inspectable evidence for later human analysis;
+- tests authored for rule profiles, adapter fail-closed behavior, portfolio observations and outcome-ledger persistence/safety.
 
 ## Qualification truth
 The expanded 0.06/0.07/0.08 test suite has **NOT** been executed in a confirmed full local run in the current environment. A previous attempt to obtain an executable checkout failed because GitHub DNS resolution was unavailable. GitHub Actions are intentionally not being consumed as a routine substitute because remote resources are scarce.
@@ -73,7 +77,7 @@ Original photographs remain read-only. Pixel/byte reads require the established 
 
 ## Next development order
 1. Consolidate the 0.07 review surface with candidate-dashboard UX and authoritative shortlist status.
-2. Continue 0.08 marketplace-neutral adapter contracts without embedding unverified marketplace requirements.
+2. Continue 0.08 marketplace-neutral adapter and outcome-analysis contracts without embedding unverified marketplace requirements.
 3. Expand explainable portfolio intelligence and metadata assistance while keeping human control/no hidden score.
 4. Execute full local qualification when a checkout becomes available.
 5. Perform a small explicitly selected real-photo end-to-end dry run after qualification.
