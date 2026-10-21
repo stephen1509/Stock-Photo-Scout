@@ -12,23 +12,36 @@ Exact-duplicate grouping and explainable metadata-level technical prompts.
 ## 0.04 — Stock readiness foundation — complete
 Editable title/keyword/notes/rights observations, spelling support, CLI and local dashboard.
 
-## Research and operating plan — complete
-Current Dreamstime workflow and Windows tools researched; `RESEARCH_BRIEF_2026-09-01.md` and `APP_OPERATING_PLAN.md` are current.
+## 0.05 — Candidate workflow foundation — implemented / historical qualification only
+Local candidate workspace, explicit-consent external previews, technical observations, metadata/editor handoff and manual preflight foundation are implemented. The historical 79/79 qualification belongs to this older baseline, not the expanded development branch. A 16-image human-labelled visual pass remains too small for trusted calibration.
 
-## 0.05A — Local candidate workspace — first real-image trial complete
-Candidate states, consented external previews, gallery/dashboard, preview integrity/staleness verification and safety hardening are implemented. An approved image trial confirmed a byte-identical external preview and no source-file changes.
+## 0.06 — Reliability & exact-file QC — implemented / executable qualification pending
+Fail-closed integrity, route-sensitive rights review, exact source→export provenance, exact-export human QC, strict persisted analysis, path/symlink hardening, atomic external persistence and consolidated readiness gates are implemented. Direct `submission-ready` mutation is prohibited and legacy ready records are non-authoritative.
 
-## 0.05B — Local technical/visual suggestions — first human-labelled pass complete / calibration pending
-Pure decoder-independent luminance, clipping, sharpness-proxy and noise-proxy engine is implemented and tested. Consent-gated decoder orchestration, external analysis persistence, analysis→preflight handoff, a bounded optional Pillow-compatible adapter, and a local descriptive `calibration-report` are implemented. A 16-image human-labelled pass produced useful group summaries without source changes; broader calibration remains required before review guidance can be trusted.
+## 0.07 — Review Intelligence — substantially implemented / executable qualification pending
+Human fast screen, Stage-2 focus/composition/usefulness review, deterministic similar-group hints, preferred-member selection, actual-pixel inspection planning, main-dashboard integration and authoritative shortlist gating are implemented. Review/usefulness state is now persisted as one atomic combined review packet with legacy split-file fallback/migration. No hidden stock/acceptance score is used.
 
-## 0.05C — Metadata and editor handoff — local foundation implemented
-Human-approved title/description/keywords/categories, commercial/editorial choice, editor target, working-export path, local persistence, CLI and dashboard Preparation page are implemented. Real editor handoff remains to be proven on the PC.
+## 0.08 — Stock Intelligence & marketplace-neutral engine — in progress
+Implemented foundations include:
+- explainable portfolio observations;
+- deterministic metadata assistance from human-entered facts only;
+- sourced/dated/stale-aware marketplace rule profiles and external persistence;
+- marketplace-neutral candidate adapter and high-level preflight binding;
+- human-controlled marketplace outcome ledger;
+- explainable historical outcome summaries.
 
-## 0.05D — Dreamstime manual preflight — local foundation implemented
-Local preflight packet and dashboard/CLI access are implemented. It never uploads or claims acceptance. Final workflow validation requires a real selected export and a current manual Dreamstime-rule recheck.
+No Dreamstime/Adobe/Shutterstock/Getty/iStock/Alamy acceptance requirements are invented by the neutral framework. Marketplace-specific profiles must be researched from authoritative current sources before use.
 
-## 0.05E — Optional integrations — not authorized
-Cloud/AI services, paid APIs, account/browser integration or upload assistance require separate explicit approval.
+## 0.09 — Marketplace adapters — planned
+After full local qualification, create individual adapters beginning with Dreamstime. Move marketplace-specific preparation behavior such as category pairs behind the adapter boundary. Each adapter must carry authoritative source provenance, verification date and staleness policy. Upload/submission remains a separate explicitly authorized action.
 
-## Current next gate
-Use the verified Dreamstime portal field map to align local metadata/release/category preparation; no portal metadata save or submission is authorized. A broader, deliberately selected human-labelled set remains required before visual-signal guidance can be trusted.
+## 0.10 — Learning & calibration — planned
+Expand human-labelled calibration toward roughly 100–200 deliberately varied photographs and use factual marketplace outcomes to improve human review prompts. Historical outcomes and visual observations must remain explainable evidence, not automatic rejection criteria, acceptance probabilities or sales predictions.
+
+## Current critical gate
+Obtain a usable executable checkout and run the complete expanded unit suite, then synthetic destructive qualification. Repair failures in batches and rerun. Do not merge the development branch or claim a new pass count from static inspection alone.
+
+After qualification, perform a small explicitly selected real-photo end-to-end dry run: candidate → 0.07 human review → authoritative shortlist → factual preparation/route/rights → separate working export → provenance → exact-export 100% QC → current sourced marketplace rules → human marketplace preflight. No marketplace submission is included without separate explicit authorization.
+
+## Optional integrations
+Cloud CV/generative AI, paid APIs, marketplace account/browser automation, upload/submission and other external integrations are not required for the current architecture and require separate explicit approval where applicable.
