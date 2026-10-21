@@ -4,7 +4,6 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"src"))
 from stock_photo_scout.review_intelligence import ReviewIntelligenceRecord
 from stock_photo_scout.review_workflow import assess_review_workflow
 from stock_photo_scout.stock_usefulness import StockUsefulnessReview,review_complete,usefulness_prompts
-
 def complete_usefulness():return StockUsefulnessReview("clear","clean","right","strong","distinct",False,True,"Human reviewed")
 class ReviewWorkflow007Tests(unittest.TestCase):
  def test_unreviewed_stays_stage_one(self):
@@ -12,6 +11,8 @@ class ReviewWorkflow007Tests(unittest.TestCase):
  def test_skip_cannot_shortlist(self):self.assertFalse(assess_review_workflow(ReviewIntelligenceRecord("a.jpg",screen_decision="skip")).can_shortlist)
  def test_inspect_fails_closed_without_stage_two_reviews(self):
   a=assess_review_workflow(ReviewIntelligenceRecord("a.jpg",screen_decision="inspect"));self.assertFalse(a.can_shortlist);self.assertGreaterEqual(len(a.blockers),2)
+ def test_unknown_composition_blocks_even_when_usefulness_complete(self):
+  r=ReviewIntelligenceRecord("a.jpg",screen_decision="inspect",focus_state="looks-clean",composition_state="unknown");a=assess_review_workflow(r,complete_usefulness());self.assertFalse(a.can_shortlist);self.assertIn("Human composition review is incomplete.",a.blockers)
  def test_complete_human_stage_two_can_shortlist(self):
   r=ReviewIntelligenceRecord("a.jpg",screen_decision="inspect",focus_state="looks-clean",composition_state="strong");a=assess_review_workflow(r,complete_usefulness());self.assertTrue(a.can_shortlist);self.assertEqual(a.blockers,())
  def test_focus_concern_blocks_even_with_usefulness_complete(self):
