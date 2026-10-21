@@ -27,6 +27,26 @@ class PreflightPacketTests(unittest.TestCase):
         self.assertIn("requirements have not been re-confirmed", text)
         self.assertIn("does not upload, submit", text)
 
+    def test_unknown_integrity_fails_closed(self) -> None:
+        preparation = PreparationRecord(
+            "photo.jpg",
+            title="Temple at dawn",
+            description="Historic temple exterior at dawn",
+            keywords=("temple", "dawn", "Japan"),
+            route="editorial",
+        )
+        packet = build_preflight_packet(
+            preparation,
+            candidate_state="submission-ready",
+            preview_integrity_confirmed=None,
+            current_requirements_reviewed=True,
+        )
+        self.assertFalse(packet.local_packet_complete)
+        self.assertIn(
+            "The local preview/export integrity check has not been explicitly confirmed.",
+            packet.blockers,
+        )
+
     def test_complete_local_packet_still_does_not_claim_marketplace_acceptance(self) -> None:
         preparation = PreparationRecord(
             "photo.jpg",
@@ -58,6 +78,7 @@ class PreflightPacketTests(unittest.TestCase):
                 route="commercial",
             ),
             candidate_state="submission-ready",
+            preview_integrity_confirmed=True,
             current_requirements_reviewed=True,
         )
         serialized = preflight_to_json(packet)
