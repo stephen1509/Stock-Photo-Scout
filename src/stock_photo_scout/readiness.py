@@ -9,14 +9,19 @@ class ReadinessAssessment:
     ready: bool
     blockers: tuple[str,...]
 
-def assess_readiness(*,review:CandidateReviewRecord,rights:RightsReview,provenance_current:bool,current_marketplace_requirements_reviewed:bool,final_qc:FinalQcRecord|None=None,current_export_sha256:str="",final_qc_confirmed:bool|None=None)->ReadinessAssessment:
-    """Fail closed across independent review, rights, provenance, exact-file QC and current marketplace gates.
+def assess_readiness(*,review:CandidateReviewRecord,rights:RightsReview,provenance_current:bool,current_marketplace_requirements_reviewed:bool,final_qc:FinalQcRecord|None=None,current_export_sha256:str="",final_qc_confirmed:bool|None=None,review_intelligence_complete:bool|None=None)->ReadinessAssessment:
+    """Fail closed across review, rights, provenance, exact-file QC and marketplace gates.
+
+    ``review_intelligence_complete`` binds the 0.07 human review workflow into
+    consolidated readiness and must be literal True. Old 0.06-only records
+    therefore cannot silently become submission-ready.
 
     ``final_qc_confirmed`` remains only for old caller compatibility and cannot
     make an image ready. Rights marked ``reviewed`` must be bound to the exact
     final commercial/editorial route selected by the candidate review.
     """
     blockers=list(readiness_blockers(review))
+    if review_intelligence_complete is not True:blockers.append("0.07 human review intelligence is not explicitly complete.")
     required_route=review.route if review.route in {"commercial","editorial"} else None
     blockers.extend(rights_blockers(rights,required_route=required_route))
     if provenance_current is not True:blockers.append("Source/export provenance is not explicitly current.")
