@@ -25,28 +25,28 @@ Implemented on the development branch:
 - legacy `submission-ready` remains readable but non-authoritative;
 - preview metadata updates independently of state transitions, preserving legacy compatibility without promotion/demotion.
 
-## 0.07 Review Intelligence — substantially implemented, qualification pending
+## 0.07 Review Intelligence — implementation substantially complete, qualification pending
 Implemented:
 - human fast-screen states: unreviewed / skip / hold / inspect;
 - explicit human reason codes with no aggregate stock/acceptance score;
 - deterministic similar/burst hints from exact hash, capture-time proximity and weak filename-sequence proximity;
 - explicit human preferred-member decision for grouped candidates;
 - human-specified subject region → safe actual-pixel inspection-region planning;
-- structured composition/usefulness review: subject clarity, background clutter, copy space, crop flexibility, redundancy and alternate-orientation review;
+- structured composition/usefulness review including subject clarity, background clutter, copy space, crop flexibility, redundancy, alternate-crop and alternate-orientation review;
+- explicit human composition state is independently required; `composition_state=unknown` fails closed even if the separate usefulness record is otherwise complete;
 - fail-closed Stage-1 → Stage-2 workflow assessment;
 - deterministic external review/usefulness persistence with source-tree write refusal and atomic overwrite;
 - ReviewService composing persisted review state and workflow assessment;
 - validated localhost-dashboard payload adapter;
 - authoritative shortlist gate: the legacy workspace `shortlist` label alone is not proof of completed 0.07 review;
-- standalone 0.07 review controller/page;
-- localhost-only 0.07 HTTP server and runnable checkout launcher;
-- review server security tests covering localhost restriction, non-serving of originals, traversal rejection and bounded JSON requests;
+- standalone review controller/page and localhost-only review HTTP server;
+- main candidate dashboard now mounts `/review`, exposes review load/save APIs, displays authoritative shortlist status and links every candidate to human review;
+- direct candidate transition to `shortlist` is refused until 0.07 review actually qualifies the candidate;
+- legacy `submission-ready` is displayed as non-authoritative rather than silently trusted;
+- the review page exposes the complete persisted review surface, including review copy-space, alternate crop, general notes and alternate-orientation fields;
+- dashboard/category-pair construction now uses named fields, preventing route/editor/path shifts after the category-pair schema addition;
+- regression tests authored for the integrated shortlist gate, external review directory, category-pair round trip and complete review field surface;
 - consolidated submission readiness requires literal `review_intelligence_complete=True`; old 0.06 callers fail closed instead of bypassing 0.07 review.
-
-Remaining UI consolidation:
-- link/mount the 0.07 review surface directly from the main candidate dashboard;
-- display authoritative review/shortlist status on candidate cards;
-- prevent the legacy workspace `shortlist` label from visually implying completed 0.07 qualification.
 
 ## Preparation / metadata hardening
 Preparation now has strict supported-schema parsing, typed keyword/category/category-pair validation, safe cross-platform relative paths, external-only persistence, fsync-backed creation/atomic overwrite, duplicate-keyword prompts and blank keyword/category prompts. Dreamstime category pairs remain a marketplace-specific preparation detail and should migrate behind the adapter boundary rather than spread into the neutral core.
@@ -76,9 +76,8 @@ Therefore:
 Original photographs remain read-only. Pixel/byte reads require the established explicit-consent pathways. No cloud CV/generative AI is required. No marketplace upload, submission, publication or deletion is authorized by this development work. The previously authorized non-original Dreamstime working-copy test remains unfinished and must not be continued without explicit action-time instruction.
 
 ## Next development order
-1. Consolidate the 0.07 review surface with candidate-dashboard UX and authoritative shortlist status.
-2. Continue 0.08 marketplace-neutral adapter and outcome-analysis contracts without embedding unverified marketplace requirements.
-3. Expand explainable portfolio intelligence and metadata assistance while keeping human control/no hidden score.
-4. Execute full local qualification when a checkout becomes available.
-5. Perform a small explicitly selected real-photo end-to-end dry run after qualification.
-6. Only after authoritative requirements research, populate individual marketplace adapters with sourced, dated, stale-aware rules.
+1. Continue 0.08 marketplace-neutral outcome analysis and metadata-assistance contracts without embedding unverified marketplace requirements.
+2. Audit remaining persistence/concurrency edges, especially paired review/usefulness state, before calling 0.07 structurally closed.
+3. Execute full local qualification when a checkout becomes available.
+4. Perform a small explicitly selected real-photo end-to-end dry run after qualification.
+5. Only after authoritative requirements research, populate individual marketplace adapters with sourced, dated, stale-aware rules.
