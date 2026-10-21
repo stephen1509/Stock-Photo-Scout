@@ -39,6 +39,8 @@ def build_preflight_packet(
     """Assemble a local manual-upload review packet.
 
     The result never claims legal clearance, Dreamstime acceptance, or upload eligibility.
+    Submission-ready review fails closed: an integrity check must be explicitly
+    confirmed rather than merely not known to have failed.
     """
 
     preparation_report = evaluate_preparation(preparation)
@@ -54,8 +56,11 @@ def build_preflight_packet(
         )
     if rights_prompts:
         blockers.append("Unresolved people/property/logo/release observations remain for manual review.")
-    if preview_integrity_confirmed is False:
-        blockers.append("The local preview/export integrity check does not match the current source bytes.")
+    if preview_integrity_confirmed is not True:
+        if preview_integrity_confirmed is False:
+            blockers.append("The local preview/export integrity check does not match the current source bytes.")
+        else:
+            blockers.append("The local preview/export integrity check has not been explicitly confirmed.")
     if not current_requirements_reviewed:
         blockers.append("Current Dreamstime requirements have not been re-confirmed for this manual submission session.")
 
