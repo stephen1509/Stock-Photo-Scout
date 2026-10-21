@@ -18,8 +18,8 @@ class RightsReview:
     identifiable_interiors: str = "unchecked"
     model_release: str = "not-applicable"
     property_release: str = "not-applicable"
-    reviewed_route: str = "undecided"
     notes: str = ""
+    reviewed_route: str = "undecided"
 
 _ALLOWED={"unchecked","none-seen","present","question","reviewed"}
 _RELEASE={"not-applicable","unavailable","available","question","reviewed"}
