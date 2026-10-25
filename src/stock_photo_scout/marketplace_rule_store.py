@@ -20,16 +20,31 @@ def profile_from_json(text:str)->MarketplaceRuleProfile:
  except (TypeError,ValueError) as exc:raise ValueError("Marketplace verification date is invalid.") from exc
  try:return MarketplaceRuleProfile(item["marketplace"],item["source_url"],verified,item.get("review_after_days"),item.get("notes",""))
  except TypeError as exc:raise ValueError("Marketplace rule profile fields are invalid.") from exc
+def _reject_symlink_ancestors(target:Path)->None:
+ current=target.parent
+ while True:
+  if current.exists() and current.is_symlink():raise ValueError("Refusing marketplace rule path through a symlink directory.")
+  if current==current.parent:break
+  current=current.parent
+def _fsync_directory(directory:Path)->None:
+ try:
+  fd=os.open(directory,os.O_RDONLY)
+ except (AttributeError,OSError):return
+ try:os.fsync(fd)
+ except OSError:pass
+ finally:os.close(fd)
 def save_profile(profile:MarketplaceRuleProfile,destination:str|Path,*,overwrite:bool=False)->Path:
- target=Path(destination).expanduser().resolve(strict=False)
+ raw=Path(destination).expanduser();_reject_symlink_ancestors(raw)
+ if raw.is_symlink():raise ValueError("Refusing symlink marketplace rule destination.")
+ target=raw.resolve(strict=False)
  if target.suffix.lower()!=".json":raise ValueError("Marketplace rule profile must use a .json suffix.")
- target.parent.mkdir(parents=True,exist_ok=True)
+ target.parent.mkdir(parents=True,exist_ok=True);_reject_symlink_ancestors(target)
  if target.exists() and (target.is_symlink() or not target.is_file()):raise ValueError("Refusing non-regular marketplace rule destination.")
  if target.exists() and not overwrite:raise FileExistsError(target)
  text=profile_to_json(profile);temp=None
  try:
   with tempfile.NamedTemporaryFile(mode="w",encoding="utf-8",newline="\n",dir=target.parent,prefix=f".{target.stem}.",suffix=".tmp",delete=False) as out:out.write(text);out.flush();os.fsync(out.fileno());temp=Path(out.name)
-  os.replace(temp,target)
+  os.replace(temp,target);_fsync_directory(target.parent)
  finally:
   if temp is not None and temp.exists():temp.unlink()
  return target
