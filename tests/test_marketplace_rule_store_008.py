@@ -23,4 +23,10 @@ class MarketplaceRuleStore008Tests(unittest.TestCase):
    except (OSError,NotImplementedError):self.skipTest("symlinks unavailable")
    with self.assertRaises(ValueError):save_profile(self.profile(),link,overwrite=True)
    self.assertEqual(real.read_text(),"keep")
+ def test_symlink_parent_rejected(self):
+  with tempfile.TemporaryDirectory() as td:
+   root=Path(td);real=root/"real";real.mkdir();link=root/"linked"
+   try:link.symlink_to(real,target_is_directory=True)
+   except (OSError,NotImplementedError):self.skipTest("symlinks unavailable")
+   with self.assertRaises(ValueError):save_profile(self.profile(),link/"rules.json")
 if __name__=="__main__":unittest.main()
