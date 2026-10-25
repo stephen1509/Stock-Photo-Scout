@@ -9,7 +9,7 @@ from stock_photo_scout.readiness import assess_readiness
 SHA="a"*64
 class ReadinessReviewIntelligence007Tests(unittest.TestCase):
  def base(self,**changes):
-  args=dict(review=CandidateReviewRecord(technical_state="passed",stock_potential="promising",rights_state="reviewed",route="commercial",preparation_state="complete"),rights=RightsReview(*(["none-seen"]*9)),provenance_current=True,current_marketplace_requirements_reviewed=True,final_qc=FinalQcRecord(SHA,True,True,(),"checked"),current_export_sha256=SHA)
+  args=dict(review=CandidateReviewRecord(relative_path="a.jpg",review_decision="candidate",technical_state="pass",stock_potential="promising",rights_state="clear-looking",route="commercial",preparation_state="ready"),rights=RightsReview(*(["none-seen"]*9)),provenance_current=True,current_marketplace_requirements_reviewed=True,final_qc=FinalQcRecord(SHA,True,True,(),"checked"),current_export_sha256=SHA)
   args.update(changes);return assess_readiness(**args)
  def test_old_callers_fail_closed_without_007_review(self):
   r=self.base();self.assertFalse(r.ready);self.assertIn("0.07 human review intelligence is not explicitly complete.",r.blockers)
