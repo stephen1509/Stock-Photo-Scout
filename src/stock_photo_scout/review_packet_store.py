@@ -38,7 +38,9 @@ def _fsync_directory(directory:Path)->None:
  except OSError:pass
  finally:os.close(fd)
 def save_packet(review:ReviewIntelligenceRecord,usefulness:StockUsefulnessReview,destination:str|Path,source_root:str|Path,*,overwrite:bool=False)->Path:
- root=Path(source_root).expanduser().resolve(strict=True);raw=Path(destination).expanduser();_reject_symlink_ancestors(raw);target=raw.resolve(strict=False)
+ root=Path(source_root).expanduser().resolve(strict=True);raw=Path(destination).expanduser();_reject_symlink_ancestors(raw)
+ if raw.is_symlink():raise ValueError("Refusing symlink review packet destination.")
+ target=raw.resolve(strict=False)
  if target.is_relative_to(root):raise ValueError("Refusing to write review packet inside the source-photo folder.")
  if target.suffix.lower()!=".json":raise ValueError("Review packet must use a .json suffix.")
  text=packet_to_json(review,usefulness);target.parent.mkdir(parents=True,exist_ok=True);_reject_symlink_ancestors(target)
